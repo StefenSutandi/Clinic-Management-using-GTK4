@@ -1,63 +1,119 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "library.h"
 
 int main() {
-    Pasien dataPasien[100];
-    RiwayatKedatangan dataRiwayat[100];
-    int jumlahPasien = 0;
-    int jumlahRiwayat = 0;
-    int pilihan;
+    // Deklarasi variabel
+    int choice, year, month;
+    RiwayatDatang riwayat_datang[100];
+    DataPasien data_pasien[100];
+    BiayaTindakan biaya_tindakan[100];
+    int jumlah_riwayat = 0;
+    int jumlah_pasien = 0;
+    int jumlah_tindakan = 0;
+
+    // Baca data dari file csv
+    jumlah_pasien = bacaDataPasien(data_pasien, "data_pasien.csv");
+    jumlah_riwayat = bacaRiwayatDatang(riwayat_datang, "riwayat_datang.csv");
+    jumlah_tindakan = bacaBiayaTindakan(biaya_tindakan, "biaya_tindakan.csv");
 
     do {
-        printf("\nMenu Utama\n");
-        printf("1. Tambah Pasien\n");
-        printf("2. Lihat Pasien\n");
-        printf("3. Ubah Pasien\n");
-        printf("4. Hapus Pasien\n");
-        printf("5. Tambah Riwayat Kedatangan\n");
-        printf("6. Lihat Riwayat Kedatangan\n");
-        printf("7. Ubah Riwayat Kedatangan\n");
-        printf("8. Hapus Riwayat Kedatangan\n");
-        printf("9. Import Data dari Excel\n");
-        printf("10. Keluar\n");
-        printf("Pilih menu: ");
-        scanf("%d", &pilihan);
+        // Tampilkan menu
+        printf("\n=== APLIKASI PENCATATAN PASIEN KLINIK X ===\n");
+        printf("1. Tambah Data Pasien\n");
+        printf("2. Ubah Data Pasien\n");
+        printf("3. Hapus Data Pasien\n");
+        printf("4. Cari Data Pasien\n");
+        printf("5. Tambah Riwayat Kedatangan Pasien\n");
+        printf("6. Ubah Riwayat Kedatangan Pasien\n");
+        printf("7. Hapus Riwayat Kedatangan Pasien\n");
+        printf("8. Cari Riwayat Kedatangan Pasien\n");
+        printf("9. Informasi Pasien dan Riwayat Medis\n");
+        printf("10. Laporan Pendapatan Bulanan\n");
+        printf("11. Laporan Pendapatan Tahunan\n");
+        printf("12. Rata-rata Pendapatan Tahunan\n");
+        printf("13. Jumlah Pasien per Bulan\n");
+        printf("14. Jumlah Penyakit per Bulan\n");
+        printf("15. Pasien yang Perlu Kembali Kontrol\n");
+        printf("0. Keluar\n");
+        printf("Pilih: ");
+        scanf("%d", &choice);
 
-        switch (pilihan) {
+        // Proses pilihan menu
+        switch (choice) {
             case 1:
-                tambahPasien(dataPasien, &jumlahPasien);
+                tambahDataPasien(data_pasien, &jumlah_pasien, (DataPasien){});
                 break;
             case 2:
-                lihatPasien(dataPasien, jumlahPasien);
+                ubahDataPasien(data_pasien, jumlah_pasien, "", (DataPasien){});
                 break;
             case 3:
-                ubahPasien(dataPasien, jumlahPasien);
+                hapusDataPasien(data_pasien, &jumlah_pasien, "");
                 break;
             case 4:
-                hapusPasien(dataPasien, &jumlahPasien);
+                cariDataPasien(data_pasien, jumlah_pasien, "");
                 break;
             case 5:
-                tambahRiwayat(dataRiwayat, &jumlahRiwayat);
+                tambahRiwayatKedatanganPasien(riwayat_datang, &jumlah_riwayat, (RiwayatDatang){});
                 break;
             case 6:
-                lihatRiwayat(dataRiwayat, jumlahRiwayat);
+                ubahRiwayatKedatanganPasien(riwayat_datang, jumlah_riwayat, -1, (RiwayatDatang){});
                 break;
             case 7:
-                ubahRiwayat(dataRiwayat, jumlahRiwayat);
+                hapusRiwayatKedatanganPasien(riwayat_datang, &jumlah_riwayat, -1);
                 break;
             case 8:
-                hapusRiwayat(dataRiwayat, &jumlahRiwayat);
+                cariRiwayatKedatanganPasien(riwayat_datang, jumlah_riwayat, "");
                 break;
             case 9:
-                bacaFileExcel("DataPMC20232024.xlsx", dataPasien, &jumlahPasien);
+                informasiPasienRiwayatMedis(riwayat_datang, jumlah_riwayat, "");
                 break;
             case 10:
-                printf("Keluar dari program.\n");
+                printf("Masukkan bulan (1-12): ");
+                scanf("%d", &month);
+                printf("Masukkan tahun: ");
+                scanf("%d", &year);
+                laporanPendapatanBulanan(riwayat_datang, jumlah_riwayat, month, year);
+                break;
+            case 11:
+                printf("Masukkan tahun: ");
+                scanf("%d", &year);
+                laporanPendapatanTahunan(riwayat_datang, jumlah_riwayat, year);
+                break;
+            case 12:
+                printf("Masukkan tahun mulai: ");
+                scanf("%d", &year);
+                printf("Masukkan tahun selesai: ");
+                int year_end;
+                scanf("%d", &year_end);
+                rataRataPendapatanTahunan(riwayat_datang, jumlah_riwayat, year, year_end);
+                break;
+            case 13:
+                printf("Masukkan bulan (1-12): ");
+                scanf("%d", &month);
+                printf("Masukkan tahun: ");
+                scanf("%d", &year);
+                jumlahPasienPerBulan(riwayat_datang, jumlah_riwayat, month, year);
+                break;
+            case 14:
+                printf("Masukkan bulan (1-12): ");
+                scanf("%d", &month);
+                printf("Masukkan tahun: ");
+                scanf("%d", &year);
+                jumlahPenyakitPerBulan(riwayat_datang, jumlah_riwayat, month, year);
+                break;
+            case 15:
+                pasienKontrol(riwayat_datang, jumlah_riwayat);
+                break;
+            case 0:
+                printf("Terima kasih telah menggunakan aplikasi ini.\n");
                 break;
             default:
-                printf("Pilihan tidak valid!\n");
+                printf("Pilihan tidak valid. Silakan pilih lagi.\n");
+                break;
         }
-    } while (pilihan != 10);
+    } while (choice != 0);
 
     return 0;
 }
