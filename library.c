@@ -1,206 +1,153 @@
-#include "library.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include "library.h"
 
-Patient patients[100];
-int patient_count = 0;
-
-void add_patient(int id, const char *name, int age, const char *gender, const char *diagnosis, const char *treatment, int follow_up_days) {
-    if (patient_count >= 100) {
-        printf("Kapasitas maksimal pasien tercapai.\n");
+void tambahPasien(Pasien *data_p, int *jumlah_p) {
+    if (*jumlah_p >= 100) {
+        printf("Kapasitas data pasien penuh!\n");
         return;
     }
-    
-    patients[patient_count].id = id;
-    strncpy(patients[patient_count].name, name, 50);
-    patients[patient_count].age = age;
-    strncpy(patients[patient_count].gender, gender, sizeof(patients[patient_count].gender));
-    strncpy(patients[patient_count].diagnosis, diagnosis, sizeof(patients[patient_count].diagnosis));
-    strncpy(patients[patient_count].treatment, treatment, sizeof(patients[patient_count].treatment));
-    patients[patient_count].follow_up_days = follow_up_days;
-    
-    patient_count++;
-    printf("Pasien berhasil ditambahkan!\n");
+    printf("Nama Lengkap: ");
+    scanf(" %[^\n]", data_p[*jumlah_p].nama_lengkap);
+    printf("Alamat: ");
+    scanf(" %[^\n]", data_p[*jumlah_p].alamat);
+    printf("Kota: ");
+    scanf(" %[^\n]", data_p[*jumlah_p].kota);
+    printf("Tempat Lahir: ");
+    scanf(" %[^\n]", data_p[*jumlah_p].tempat_lahir);
+    printf("Tanggal Lahir (YYYY-MM-DD): ");
+    scanf(" %[^\n]", data_p[*jumlah_p].tanggal_lahir);
+    printf("Umur: ");
+    scanf("%d", &data_p[*jumlah_p].umur);
+    printf("No BPJS: ");
+    scanf(" %[^\n]", data_p[*jumlah_p].no_bpjs);
+    printf("ID Pasien: ");
+    scanf(" %[^\n]", data_p[*jumlah_p].id_pasien);
+    (*jumlah_p)++;
 }
 
-void update_patient() {
-    int id;
-    printf("Masukkan ID pasien yang ingin diubah: ");
-    scanf("%d", &id);
-    
-    for (int i = 0; i < patient_count; i++) {
-        if (patients[i].id == id) {
-            printf("Masukkan nama baru pasien: ");
-            scanf(" %[^\n]", patients[i].name);
-            printf("Masukkan umur baru pasien: ");
-            scanf("%d", &patients[i].age);
-            printf("Masukkan jenis kelamin baru pasien: ");
-            scanf(" %s", patients[i].gender);
-            printf("Masukkan diagnosis baru: ");
-            scanf(" %[^\n]", patients[i].diagnosis);
-            printf("Masukkan perawatan baru: ");
-            scanf(" %[^\n]", patients[i].treatment);
-            printf("Masukkan hari kontrol baru: ");
-            scanf("%d", &patients[i].follow_up_days);
-            printf("Data pasien berhasil diperbarui!\n");
+void lihatPasien(Pasien *data_p, int jumlah_p) {
+    for (int i = 0; i < jumlah_p; i++) {
+        printf("Pasien %d:\n", i + 1);
+        printf("Nama Lengkap: %s\n", data_p[i].nama_lengkap);
+        printf("Alamat: %s\n", data_p[i].alamat);
+        printf("Kota: %s\n", data_p[i].kota);
+        printf("Tempat Lahir: %s\n", data_p[i].tempat_lahir);
+        printf("Tanggal Lahir: %s\n", data_p[i].tanggal_lahir);
+        printf("Umur: %d\n", data_p[i].umur);
+        printf("No BPJS: %s\n", data_p[i].no_bpjs);
+        printf("ID Pasien: %s\n", data_p[i].id_pasien);
+    }
+}
+
+void ubahPasien(Pasien *data_p, int jumlah_p) {
+    char id[20];
+    printf("Masukkan ID Pasien yang ingin diubah: ");
+    scanf(" %[^\n]", id);
+    for (int i = 0; i < jumlah_p; i++) {
+        if (strcmp(data_p[i].id_pasien, id) == 0) {
+            printf("Nama Lengkap: ");
+            scanf(" %[^\n]", data_p[i].nama_lengkap);
+            printf("Alamat: ");
+            scanf(" %[^\n]", data_p[i].alamat);
+            printf("Kota: ");
+            scanf(" %[^\n]", data_p[i].kota);
+            printf("Tempat Lahir: ");
+            scanf(" %[^\n]", data_p[i].tempat_lahir);
+            printf("Tanggal Lahir (YYYY-MM-DD): ");
+            scanf(" %[^\n]", data_p[i].tanggal_lahir);
+            printf("Umur: ");
+            scanf("%d", &data_p[i].umur);
+            printf("No BPJS: ");
+            scanf(" %[^\n]", data_p[i].no_bpjs);
+            printf("ID Pasien: ");
+            scanf(" %[^\n]", data_p[i].id_pasien);
             return;
         }
     }
-    printf("Pasien dengan ID tersebut tidak ditemukan.\n");
+    printf("ID Pasien tidak ditemukan!\n");
 }
 
-void delete_patient() {
-    int id;
-    printf("Masukkan ID pasien yang ingin dihapus: ");
-    scanf("%d", &id);
-    
-    for (int i = 0; i < patient_count; i++) {
-        if (patients[i].id == id) {
-            for (int j = i; j < patient_count - 1; j++) {
-                patients[j] = patients[j + 1];
+void hapusPasien(Pasien *data_p, int *jumlah_p) {
+    char id[20];
+    printf("Masukkan ID Pasien yang ingin dihapus: ");
+    scanf(" %[^\n]", id);
+    for (int i = 0; i < *jumlah_p; i++) {
+        if (strcmp(data_p[i].id_pasien, id) == 0) {
+            for (int j = i; j < *jumlah_p - 1; j++) {
+                data_p[j] = data_p[j + 1];
             }
-            patient_count--;
-            printf("Pasien berhasil dihapus!\n");
+            (*jumlah_p)--;
+            printf("Pasien berhasil dihapus.\n");
             return;
         }
     }
-    printf("Pasien dengan ID tersebut tidak ditemukan.\n");
+    printf("ID Pasien tidak ditemukan!\n");
 }
 
-void search_patient() {
-    int id;
-    printf("Masukkan ID pasien yang ingin dicari: ");
-    scanf("%d", &id);
-    
-    for (int i = 0; i < patient_count; i++) {
-        if (patients[i].id == id) {
-            printf("ID: %d\n", patients[i].id);
-            printf("Nama: %s\n", patients[i].name);
-            printf("Umur: %d\n", patients[i].age);
-            printf("Jenis Kelamin: %s\n", patients[i].gender);
-            printf("Diagnosis: %s\n", patients[i].diagnosis);
-            printf("Perawatan: %s\n", patients[i].treatment);
-            printf("Hari Kontrol: %d\n", patients[i].follow_up_days);
+void tambahRiwayat(RiwayatKedatangan *data_r, int *jumlah_r) {
+    printf("Tanggal (YYYY-MM-DD): ");
+    scanf(" %[^\n]", data_r[*jumlah_r].tanggal);
+    printf("Diagnosis: ");
+    scanf(" %[^\n]", data_r[*jumlah_r].diagnosis);
+    printf("Tindakan: ");
+    scanf(" %[^\n]", data_r[*jumlah_r].tindakan);
+    printf("Kontrol (YYYY-MM-DD): ");
+    scanf(" %[^\n]", data_r[*jumlah_r].kontrol);
+    printf("Biaya: ");
+    scanf("%f", &data_r[*jumlah_r].biaya);
+    printf("ID Pasien: ");
+    scanf(" %[^\n]", data_r[*jumlah_r].id_pasien);
+    (*jumlah_r)++;
+}
+
+void lihatRiwayat(RiwayatKedatangan *data_r, int jumlah_r) {
+    for (int i = 0; i < jumlah_r; i++) {
+        printf("Riwayat Kedatangan %d:\n", i + 1);
+        printf("Tanggal: %s\n", data_r[i].tanggal);
+        printf("Diagnosis: %s\n", data_r[i].diagnosis);
+        printf("Tindakan: %s\n", data_r[i].tindakan);
+        printf("Kontrol: %s\n", data_r[i].kontrol);
+        printf("Biaya: %.2f\n", data_r[i].biaya);
+        printf("ID Pasien: %s\n", data_r[i].id_pasien);
+    }
+}
+
+void ubahRiwayat(RiwayatKedatangan *data_r, int jumlah_r) {
+    char tanggal[11];
+    printf("Masukkan tanggal kedatangan yang ingin diubah (YYYY-MM-DD): ");
+    scanf(" %[^\n]", tanggal);
+    for (int i = 0; i < jumlah_r; i++) {
+        if (strcmp(data_r[i].tanggal, tanggal) == 0) {
+            printf("Diagnosis: ");
+            scanf(" %[^\n]", data_r[i].diagnosis);
+            printf("Tindakan: ");
+            scanf(" %[^\n]", data_r[i].tindakan);
+            printf("Kontrol (YYYY-MM-DD): ");
+            scanf(" %[^\n]", data_r[i].kontrol);
+            printf("Biaya: ");
+            scanf("%f", &data_r[i].biaya);
+            printf("ID Pasien: ");
+            scanf(" %[^\n]", data_r[i].id_pasien);
             return;
         }
     }
-    printf("Pasien dengan ID tersebut tidak ditemukan.\n");
+    printf("Tanggal kedatangan tidak ditemukan!\n");
 }
 
-void list_patients() {
-    if (patient_count == 0) {
-        printf("Tidak ada pasien yang tercatat.\n");
-        return;
-    }
-    
-    for (int i = 0; i < patient_count; i++) {
-        printf("ID: %d\n", patients[i].id);
-        printf("Nama: %s\n", patients[i].name);
-        printf("Umur: %d\n", patients[i].age);
-        printf("Jenis Kelamin: %s\n", patients[i].gender);
-        printf("Diagnosis: %s\n", patients[i].diagnosis);
-        printf("Perawatan: %s\n", patients[i].treatment);
-        printf("Hari Kontrol: %d\n", patients[i].follow_up_days);
-        printf("-----------------------\n");
-    }
-}
-
-void list_follow_up_patients() {
-    if (patient_count == 0) {
-        printf("Tidak ada pasien yang tercatat.\n");
-        return;
-    }
-
-    printf("Pasien yang perlu kontrol:\n");
-    for (int i = 0; i < patient_count; i++) {
-        if (patients[i].follow_up_days > 0) {
-            printf("ID: %d\n", patients[i].id);
-            printf("Nama: %s\n", patients[i].name);
-            printf("Umur: %d\n", patients[i].age);
-            printf("Jenis Kelamin: %s\n", patients[i].gender);
-            printf("Diagnosis: %s\n", patients[i].diagnosis);
-            printf("Perawatan: %s\n", patients[i].treatment);
-            printf("Hari Kontrol: %d\n", patients[i].follow_up_days);
-            printf("-----------------------\n");
-        }
-    }
-}
-
-void import_data(const char *filename) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        fprintf(stderr, "Error membuka file %s\n", filename);
-        return;
-    }
-    
-    char line[256];
-    int id, age, follow_up_days;
-    char name[50], gender[10], diagnosis[100], treatment[100];
-    
-    // Skip header line
-    fgets(line, sizeof(line), file);
-    
-    while (fgets(line, sizeof(line), file)) {
-        sscanf(line, "%d,%49[^,],%d,%9[^,],%99[^,],%99[^,],%d",
-               &id, name, &age, gender, diagnosis, treatment, &follow_up_days);
-        add_patient(id, name, age, gender, diagnosis, treatment, follow_up_days);
-    }
-    
-    fclose(file);
-}
-
-void generate_revenue_report() {
-    // Asumsi setiap pasien membayar biaya tetap
-    const int revenue_per_patient = 100000; // Contoh biaya tetap per pasien (Rp)
-    int monthly_revenue = patient_count * revenue_per_patient;
-    int yearly_revenue = monthly_revenue * 12;
-
-    printf("Laporan Pendapatan:\n");
-    printf("Pendapatan Bulanan: Rp%d\n", monthly_revenue);
-    printf("Pendapatan Tahunan: Rp%d\n", yearly_revenue);
-    printf("Rata-rata Pendapatan Bulanan: Rp%d\n", monthly_revenue);
-}
-
-void generate_disease_statistics() {
-    // Asumsi kita hanya mencari statistik dari diagnosis yang ada
-    typedef struct {
-        char diagnosis[100];
-        int count;
-    } DiseaseStatistic;
-
-    DiseaseStatistic statistics[100];
-    int stat_count = 0;
-
-    for (int i = 0; i < patient_count; i++) {
-        int found = 0;
-        for (int j = 0; j < stat_count; j++) {
-            if (strcmp(patients[i].diagnosis, statistics[j].diagnosis) == 0) {
-                statistics[j].count++;
-                found = 1;
-                break;
+void hapusRiwayat(RiwayatKedatangan *data_r, int *jumlah_r) {
+    char tanggal[11];
+    printf("Masukkan tanggal kedatangan yang ingin dihapus (YYYY-MM-DD): ");
+    scanf(" %[^\n]", tanggal);
+    for (int i = 0; i < *jumlah_r; i++) {
+        if (strcmp(data_r[i].tanggal, tanggal) == 0) {
+            for (int j = i; j < *jumlah_r - 1; j++) {
+                data_r[j] = data_r[j + 1];
             }
-        }
-        if (!found) {
-            strcpy(statistics[stat_count].diagnosis, patients[i].diagnosis);
-            statistics[stat_count].count = 1;
-            stat_count++;
+            (*jumlah_r)--;
+            printf("Riwayat kedatangan berhasil dihapus.\n");
+            return;
         }
     }
-
-    // Sort statistics by count (descending)
-    for (int i = 0; i < stat_count - 1; i++) {
-        for (int j = i + 1; j < stat_count; j++) {
-            if (statistics[j].count > statistics[i].count) {
-                DiseaseStatistic temp = statistics[i];
-                statistics[i] = statistics[j];
-                statistics[j] = temp;
-            }
-        }
-    }
-
-    printf("Statistik Penyakit:\n");
-    for (int i = 0; i < stat_count; i++) {
-        printf("%s: %d pasien\n", statistics[i].diagnosis, statistics[i].count);
-    }
+    printf("Tanggal kedatangan tidak ditemukan!\n");
 }

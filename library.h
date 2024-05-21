@@ -2,26 +2,33 @@
 #define library_h
 
 typedef struct {
-    int id;
-    char name[50];
-    int age;
-    char gender[10];
+    char nama_lengkap[100];
+    char alamat[200];
+    char kota[100];
+    char tempat_lahir[100];
+    char tanggal_lahir[11]; // format: YYYY-MM-DD
+    int umur;
+    char no_bpjs[20];
+    char id_pasien[20];
+} Pasien;
+
+typedef struct {
+    char tanggal[11]; // format: YYYY-MM-DD
     char diagnosis[100];
-    char treatment[100];
-    int follow_up_days; // Hari kontrol berikutnya
-} Patient;
+    char tindakan[100];
+    char kontrol[11]; // format: YYYY-MM-DD
+    float biaya;
+    char id_pasien[20];
+} RiwayatKedatangan;
 
-extern Patient patients[100];
-extern int patient_count;
+void tambahPasien(Pasien *data_p, int *jumlah_p);
+void lihatPasien(Pasien *data_p, int jumlah_p);
+void ubahPasien(Pasien *data_p, int jumlah_p);
+void hapusPasien(Pasien *data_p, int *jumlah_p);
 
-void add_patient(int id, const char *name, int age, const char *gender, const char *diagnosis, const char *treatment, int follow_up_days);
-void update_patient();
-void delete_patient();
-void search_patient();
-void list_patients();
-void list_follow_up_patients();
-void import_data(const char *filename);
-void generate_revenue_report();
-void generate_disease_statistics();
+void tambahRiwayat(RiwayatKedatangan *data_r, int *jumlah_r);
+void lihatRiwayat(RiwayatKedatangan *data_r, int jumlah_r);
+void ubahRiwayat(RiwayatKedatangan *data_r, int jumlah_r);
+void hapusRiwayat(RiwayatKedatangan *data_r, int *jumlah_r);
 
 #endif
