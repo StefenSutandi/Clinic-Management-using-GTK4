@@ -31,4 +31,6 @@ void lihatRiwayat(RiwayatKedatangan *data_r, int jumlah_r);
 void ubahRiwayat(RiwayatKedatangan *data_r, int jumlah_r);
 void hapusRiwayat(RiwayatKedatangan *data_r, int *jumlah_r);
 
+void bacaFileExcel(const char *namaFile, Pasien *data_p, int *jumlah_p);
+
 #endif

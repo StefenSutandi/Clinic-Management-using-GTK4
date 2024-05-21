@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "library.h"
+#include <xlsxio_read.h>
 
 void tambahPasien(Pasien *data_p, int *jumlah_p) {
     if (*jumlah_p >= 100) {
@@ -150,4 +151,38 @@ void hapusRiwayat(RiwayatKedatangan *data_r, int *jumlah_r) {
         }
     }
     printf("Tanggal kedatangan tidak ditemukan!\n");
+}
+
+void bacaFileExcel(const char *namaFile, Pasien *data_p, int *jumlah_p) {
+    xlsxioreader xls;
+    xlsxioreadersheet sheet;
+    const char *cell;
+    int row;
+
+    xls = xlsxioread_open(namaFile);
+    if (xls == NULL) {
+        printf("Gagal membuka file Excel.\n");
+        return;
+    }
+
+    sheet = xlsxioread_sheet_open(xls, NULL, XLSXIOREAD_SKIP_EMPTY_ROWS);
+    if (sheet == NULL) {
+        printf("Gagal membuka sheet.\n");
+        xlsxioread_close(xls);
+        return;
+    }
+
+    row = 0;
+    while (xlsxioread_sheet_next_row(sheet)) {
+        row++;
+        cell = xlsxioread_sheet_next_cell(sheet);
+        if (cell != NULL) {
+            strcpy(data_p[*jumlah_p].nama_lengkap, cell);
+            // Baca data lainnya dari cell dan masukkan ke dalam struktur data_p
+            (*jumlah_p)++;
+        }
+    }
+
+    xlsxioread_sheet_close(sheet);
+    xlsxioread_close(xls);
 }

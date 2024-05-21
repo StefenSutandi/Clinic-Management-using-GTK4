@@ -18,7 +18,8 @@ int main() {
         printf("6. Lihat Riwayat Kedatangan\n");
         printf("7. Ubah Riwayat Kedatangan\n");
         printf("8. Hapus Riwayat Kedatangan\n");
-        printf("9. Keluar\n");
+        printf("9. Import Data dari Excel\n");
+        printf("10. Keluar\n");
         printf("Pilih menu: ");
         scanf("%d", &pilihan);
 
@@ -48,12 +49,15 @@ int main() {
                 hapusRiwayat(dataRiwayat, &jumlahRiwayat);
                 break;
             case 9:
+                bacaFileExcel("DataPMC20232024.xlsx", dataPasien, &jumlahPasien);
+                break;
+            case 10:
                 printf("Keluar dari program.\n");
                 break;
             default:
                 printf("Pilihan tidak valid!\n");
         }
-    } while (pilihan != 9);
+    } while (pilihan != 10);
 
     return 0;
 }
