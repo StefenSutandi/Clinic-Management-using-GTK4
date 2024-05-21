@@ -4,6 +4,6 @@ Sebuah klinik di kota X sedang melakukan sistem pencatatan pasien yang datang un
 1. Menambah, mengubah, menghapus dan mencari data pasien yang datang ke klinik X
 2. Menambah, mengubah, menghapus dan mencari riwayat kedatangan, diagnosis dan tindakan pada pasien yang datang ke klinik X
 3. Memberikan informasi pasien dan riwayat medisnya di klinik X kepada petugas medis
-4. nMendapatkan informasi laporan pendapatan bulanan dan tahunan dan informasi rata-rata pendapatan per tahun yang didapatkan klinik X
+4. Mendapatkan informasi laporan pendapatan bulanan dan tahunan dan informasi rata-rata pendapatan per tahun yang didapatkan klinik X
 5. Mendapatkan informasi jumlah pasien dan penyakit yang di derita pasien (diurutkan mulai dari yang terbesar sampai yang terkecil) per bulan dan per tahun
-6. nMemberikan informasi kepada petugas medis terkait pasien yang perlu kembali kontrol
+6. Memberikan informasi kepada petugas medis terkait pasien yang perlu kembali kontrol
