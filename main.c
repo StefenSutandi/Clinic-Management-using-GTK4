@@ -1,119 +1,115 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "library.h"
+#include "struct.h"
+
+void addPatient();
+void updatePatient();
+void deletePatient();
+void displayPatient();
+void addMedicalRecord();
+void updateMedicalRecord();
+void deleteMedicalRecord();
+void displayMedicalRecord();
+void displayPatientWithMedicalRecords();
+void getMonthlyRevenueReport(int month, int year);
+void getAnnualRevenueReport(int year);
+void getAverageAnnualRevenue();
+void getPatientAndDiseaseReport(int month, int year);
+void getAnnualPatientAndDiseaseReport(int year);
+void displayPatientsForControl();
 
 int main() {
-    // Deklarasi variabel
-    int choice, year, month;
-    RiwayatDatang riwayat_datang[100];
-    DataPasien data_pasien[100];
-    BiayaTindakan biaya_tindakan[100];
-    int jumlah_riwayat = 0;
-    int jumlah_pasien = 0;
-    int jumlah_tindakan = 0;
-
-    // Baca data dari file csv
-    jumlah_pasien = bacaDataPasien(data_pasien, "data_pasien.csv");
-    jumlah_riwayat = bacaRiwayatDatang(riwayat_datang, "riwayat_datang.csv");
-    jumlah_tindakan = bacaBiayaTindakan(biaya_tindakan, "biaya_tindakan.csv");
-
-    do {
-        // Tampilkan menu
-        printf("\n=== APLIKASI PENCATATAN PASIEN KLINIK X ===\n");
-        printf("1. Tambah Data Pasien\n");
-        printf("2. Ubah Data Pasien\n");
-        printf("3. Hapus Data Pasien\n");
-        printf("4. Cari Data Pasien\n");
-        printf("5. Tambah Riwayat Kedatangan Pasien\n");
-        printf("6. Ubah Riwayat Kedatangan Pasien\n");
-        printf("7. Hapus Riwayat Kedatangan Pasien\n");
-        printf("8. Cari Riwayat Kedatangan Pasien\n");
+    int choice;
+    while (1) {
+        printf("\nAplikasi Pencatatan Pasien Klinik X\n");
+        printf("1. Tambah Pasien\n");
+        printf("2. Tampilkan Pasien\n");
+        printf("3. Ubah Pasien\n");
+        printf("4. Hapus Pasien\n");
+        printf("5. Tambah Riwayat Medis\n");
+        printf("6. Tampilkan Riwayat Medis\n");
+        printf("7. Ubah Riwayat Medis\n");
+        printf("8. Hapus Riwayat Medis\n");
         printf("9. Informasi Pasien dan Riwayat Medis\n");
         printf("10. Laporan Pendapatan Bulanan\n");
         printf("11. Laporan Pendapatan Tahunan\n");
         printf("12. Rata-rata Pendapatan Tahunan\n");
-        printf("13. Jumlah Pasien per Bulan\n");
-        printf("14. Jumlah Penyakit per Bulan\n");
-        printf("15. Pasien yang Perlu Kembali Kontrol\n");
-        printf("0. Keluar\n");
-        printf("Pilih: ");
+        printf("13. Laporan Pasien dan Penyakit Bulanan\n");
+        printf("14. Laporan Pasien dan Penyakit Tahunan\n");
+        printf("15. Informasi Pasien Kembali Kontrol\n");
+        printf("16. Keluar\n");
+        printf("Pilih opsi: ");
         scanf("%d", &choice);
 
-        // Proses pilihan menu
         switch (choice) {
             case 1:
-                tambahDataPasien(data_pasien, &jumlah_pasien, (DataPasien){});
+                addPatient();
                 break;
             case 2:
-                ubahDataPasien(data_pasien, jumlah_pasien, "", (DataPasien){});
+                displayPatient();
                 break;
             case 3:
-                hapusDataPasien(data_pasien, &jumlah_pasien, "");
+                updatePatient();
                 break;
             case 4:
-                cariDataPasien(data_pasien, jumlah_pasien, "");
+                deletePatient();
                 break;
             case 5:
-                tambahRiwayatKedatanganPasien(riwayat_datang, &jumlah_riwayat, (RiwayatDatang){});
+                addMedicalRecord();
                 break;
             case 6:
-                ubahRiwayatKedatanganPasien(riwayat_datang, jumlah_riwayat, -1, (RiwayatDatang){});
+                displayMedicalRecord();
                 break;
             case 7:
-                hapusRiwayatKedatanganPasien(riwayat_datang, &jumlah_riwayat, -1);
+                updateMedicalRecord();
                 break;
             case 8:
-                cariRiwayatKedatanganPasien(riwayat_datang, jumlah_riwayat, "");
+                deleteMedicalRecord();
                 break;
             case 9:
-                informasiPasienRiwayatMedis(riwayat_datang, jumlah_riwayat, "");
+                displayPatientWithMedicalRecords();
                 break;
-            case 10:
+            case 10: {
+                int month, year;
                 printf("Masukkan bulan (1-12): ");
                 scanf("%d", &month);
                 printf("Masukkan tahun: ");
                 scanf("%d", &year);
-                laporanPendapatanBulanan(riwayat_datang, jumlah_riwayat, month, year);
+                getMonthlyRevenueReport(month, year);
                 break;
-            case 11:
+            }
+            case 11: {
+                int year;
                 printf("Masukkan tahun: ");
                 scanf("%d", &year);
-                laporanPendapatanTahunan(riwayat_datang, jumlah_riwayat, year);
+                getAnnualRevenueReport(year);
                 break;
+            }
             case 12:
-                printf("Masukkan tahun mulai: ");
-                scanf("%d", &year);
-                printf("Masukkan tahun selesai: ");
-                int year_end;
-                scanf("%d", &year_end);
-                rataRataPendapatanTahunan(riwayat_datang, jumlah_riwayat, year, year_end);
+                getAverageAnnualRevenue();
                 break;
-            case 13:
+            case 13: {
+                int month, year;
                 printf("Masukkan bulan (1-12): ");
                 scanf("%d", &month);
                 printf("Masukkan tahun: ");
                 scanf("%d", &year);
-                jumlahPasienPerBulan(riwayat_datang, jumlah_riwayat, month, year);
+                getPatientAndDiseaseReport(month, year);
                 break;
-            case 14:
-                printf("Masukkan bulan (1-12): ");
-                scanf("%d", &month);
+            }
+            case 14: {
+                int year;
                 printf("Masukkan tahun: ");
                 scanf("%d", &year);
-                jumlahPenyakitPerBulan(riwayat_datang, jumlah_riwayat, month, year);
+                getAnnualPatientAndDiseaseReport(year);
                 break;
+            }
             case 15:
-                pasienKontrol(riwayat_datang, jumlah_riwayat);
+                displayPatientsForControl();
                 break;
-            case 0:
-                printf("Terima kasih telah menggunakan aplikasi ini.\n");
-                break;
+            case 16:
+                return 0;
             default:
-                printf("Pilihan tidak valid. Silakan pilih lagi.\n");
-                break;
+                printf("Opsi tidak valid.\n");
         }
-    } while (choice != 0);
-
-    return 0;
+    }
 }
