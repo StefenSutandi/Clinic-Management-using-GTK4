@@ -298,7 +298,7 @@ void ConvertDate(char date[30], char *result){
     strcat(result, DD);
 }
 
-// Memuat data dati file CSV dan memasukkannya ke dalam struct
+// Memuat data dari file CSV dan memasukkannya ke dalam struct
 void load_data(){
 
     char namafile[100];
