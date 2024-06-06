@@ -243,17 +243,14 @@ void displayPatientWithMedicalRecords() {
 }
 
 void ConvertDate(char date[30], char *result){
-
     char DD[3], MM[10];
     int YYYY;
-
     if(strlen(date) > 9){
         sscanf(date, "%s %s %d", DD, MM, &YYYY);
     }
     else{
         sscanf(date, "%[^-]-%[^-]-%d", DD, MM, &YYYY);
     }
-    
     if (strcmp(MM, "Januari") == 0 || strcmp(MM, "Jan") == 0) {
         strcpy(MM, "01");
     } else if (strcmp(MM, "Februari") == 0 || strcmp(MM, "Feb") == 0) {
@@ -300,7 +297,6 @@ void ConvertDate(char date[30], char *result){
 
 // Memuat data dari file CSV dan memasukkannya ke dalam struct
 void load_data(){
-
     char namafile[100];
     char dataFile[256]; 
     char tempDate[30];
@@ -327,7 +323,6 @@ void load_data(){
     fclose(file); 
 
     file = fopen("riwayat_datang.csv", "r"); 
-
     fgets(dataFile, sizeof(dataFile), file);
     while (fgets(dataFile, sizeof(dataFile), file) != NULL) {
         sscanf(dataFile, "%d,%[^,],%s %[^,],%[^,],%[^,],%[^,],%d", 
@@ -346,7 +341,7 @@ void load_data(){
     fclose(file); 
 }
 
-// menampilkan semua pasien dan riwayat medis
+// Menampilkan semua pasien dan riwayat medis
 void displayAllPatientsAndRecords() {
     printf("Data Pasien:\n");
     for (int i = 0; i < patient_count; i++) {
