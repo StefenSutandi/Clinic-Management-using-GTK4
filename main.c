@@ -1,24 +1,9 @@
 #include <stdio.h>
 #include "struct.h"
 
-void addPatient();
-void updatePatient();
-void deletePatient();
-void displayPatient();
-void addMedicalRecord();
-void updateMedicalRecord();
-void deleteMedicalRecord();
-void displayMedicalRecord();
-void displayPatientWithMedicalRecords();
-void getMonthlyRevenueReport(int month, int year);
-void getAnnualRevenueReport(int year);
-void getAverageAnnualRevenue();
-void getPatientAndDiseaseReport(int month, int year);
-void getAnnualPatientAndDiseaseReport(int year);
-void displayPatientsForControl();
-
 int main() {
     int choice;
+    load_data();
     while (1) {
         printf("\nAplikasi Pencatatan Pasien Klinik X\n");
         printf("1. Tambah Pasien\n");
