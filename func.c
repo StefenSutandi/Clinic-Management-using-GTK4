@@ -229,146 +229,237 @@ void displayPatientWithMedicalRecords() {
     printf("Umur: %d\n", p.age);
     printf("No BPJS: %s\n", p.bpjs);
     printf("ID Pasien: %s\n", p.patient_id);
-
     printf("\nRiwayat Medis:\n");
     for (int i = 0; i < record_count; i++) {
         if (strcmp(records[i].patient_id, patient_id) == 0) {
-            MedicalRecord r = records[i];
-            printf("ID: %d\n", r.id);
-            printf("Tanggal: %s\n", r.date);
-            printf("Diagnosis: %s\n", r.diagnosis);
-            printf("Tindakan: %s\n", r.treatment);
-            printf("Tanggal Kontrol: %s\n", r.control_date);
-            printf("Biaya: %d\n\n", r.cost);
+            printf("\nID Riwayat Medis: %d\n", records[i].id);
+            printf("Tanggal: %s\n", records[i].date);
+            printf("Diagnosis: %s\n", records[i].diagnosis);
+            printf("Tindakan: %s\n", records[i].treatment);
+            printf("Tanggal Kontrol: %s\n", records[i].control_date);
+            printf("Biaya: %d\n", records[i].cost);
         }
     }
 }
 
-// Mendapatkan laporan pendapatan bulanan
+void ConvertDate(char date[30], char *result){
+
+    char DD[3], MM[10];
+    int YYYY;
+
+    if(strlen(date) > 9){
+        sscanf(date, "%s %s %d", DD, MM, &YYYY);
+    }
+    else{
+        sscanf(date, "%[^-]-%[^-]-%d", DD, MM, &YYYY);
+    }
+    
+    if (strcmp(MM, "Januari") == 0 || strcmp(MM, "Jan") == 0) {
+        strcpy(MM, "01");
+    } else if (strcmp(MM, "Februari") == 0 || strcmp(MM, "Feb") == 0) {
+        strcpy(MM, "02");
+    } else if (strcmp(MM, "Maret") == 0 || strcmp(MM, "Mar") == 0) {
+        strcpy(MM, "03");
+    } else if (strcmp(MM, "April") == 0 || strcmp(MM, "Apr") == 0) {
+        strcpy(MM, "04");
+    } else if (strcmp(MM, "Mei") == 0 || strcmp(MM, "May") == 0) {
+        strcpy(MM, "05");
+    } else if (strcmp(MM, "Juni") == 0 || strcmp(MM, "Jun") == 0) {
+        strcpy(MM, "06");
+    } else if (strcmp(MM, "Juli") == 0 || strcmp(MM, "Jul") == 0) {
+        strcpy(MM, "07");
+    } else if (strcmp(MM, "Agustus") == 0 || strcmp(MM, "Aug") == 0) {
+        strcpy(MM, "08");
+    } else if (strcmp(MM, "September") == 0 || strcmp(MM, "Sep") == 0) {
+        strcpy(MM, "09");
+    } else if (strcmp(MM, "Oktober") == 0 || strcmp(MM, "Oct") == 0) {
+        strcpy(MM, "10");
+    } else if (strcmp(MM, "November") == 0 || strcmp(MM, "Nov") == 0) {
+        strcpy(MM, "11");
+    } else if (strcmp(MM, "Desember") == 0 || strcmp(MM, "Dec") == 0) {
+        strcpy(MM, "12");
+    }
+
+    char YYYYstr[5];
+    if ( YYYY > 25 && YYYY <= 99){    
+        YYYY += 1900;
+    }
+    else if (YYYY <= 25){
+        YYYY += 2000;
+    }
+    sprintf(YYYYstr, "%d", YYYY);
+    strcat(result, YYYYstr);
+    strcat(result, "-");
+    strcat(result, MM);
+    strcat(result, "-");
+    if (strlen(DD) == 1){
+        strcat(result, "0");
+    }
+    strcat(result, DD);
+}
+
+// Memuat data dati file CSV dan memasukkannya ke dalam struct
+void load_data(){
+
+    char namafile[100];
+    char dataFile[256]; 
+    char tempDate[30];
+    char tempDate2[30];
+    char IDCode[3];
+    FILE* file = fopen("data_pasien.csv", "r"); 
+
+    fgets(dataFile, sizeof(dataFile), file);
+    while (fgets(dataFile, sizeof(dataFile), file) != NULL) {
+        sscanf(dataFile, "%d,%[^,],%[^,],%[^,],%[^,],%[^,],%d,%[^,],%s %s", 
+            &patients[patient_count].id,
+            patients[patient_count].name, 
+            patients[patient_count].address, 
+            patients[patient_count].city, 
+            patients[patient_count].birth_place, 
+            tempDate, 
+            &patients[patient_count].age, 
+            patients[patient_count].bpjs,
+            IDCode, 
+            patients[patient_count].patient_id);
+        ConvertDate(tempDate, patients[patient_count].birth_date);
+        patient_count++;
+    }
+    fclose(file); 
+
+    file = fopen("riwayat_datang.csv", "r"); 
+
+    fgets(dataFile, sizeof(dataFile), file);
+    while (fgets(dataFile, sizeof(dataFile), file) != NULL) {
+        sscanf(dataFile, "%d,%[^,],%s %[^,],%[^,],%[^,],%[^,],%d", 
+            &records[record_count].id,
+            tempDate,
+            IDCode,
+            records[record_count].patient_id,
+            records[record_count].diagnosis,
+            records[record_count].treatment,
+            tempDate2,
+            &records[record_count].cost);
+        ConvertDate(tempDate, records[record_count].date);
+        ConvertDate(tempDate2, records[record_count].control_date);
+        record_count++;
+    }
+    fclose(file); 
+}
+
+// menampilkan semua pasien dan riwayat medis
+void displayAllPatientsAndRecords() {
+    printf("Data Pasien:\n");
+    for (int i = 0; i < patient_count; i++) {
+        printf("\nID: %d\n", patients[i].id);
+        printf("Nama: %s\n", patients[i].name);
+        printf("Alamat: %s\n", patients[i].address);
+        printf("Kota: %s\n", patients[i].city);
+        printf("Tempat Lahir: %s\n", patients[i].birth_place);
+        printf("Tanggal Lahir: %s\n", patients[i].birth_date);
+        printf("Umur: %d\n", patients[i].age);
+        printf("No BPJS: %s\n", patients[i].bpjs);
+        printf("ID Pasien: %s\n", patients[i].patient_id);
+
+        printf("\nRiwayat Medis:\n");
+        for (int j = 0; j < record_count; j++) {
+            if (strcmp(records[j].patient_id, patients[i].patient_id) == 0) {
+                printf("\nID Riwayat Medis: %d\n", records[j].id);
+                printf("Tanggal: %s\n", records[j].date);
+                printf("Diagnosis: %s\n", records[j].diagnosis);
+                printf("Tindakan: %s\n", records[j].treatment);
+                printf("Tanggal Kontrol: %s\n", records[j].control_date);
+                printf("Biaya: %d\n", records[j].cost);
+            }
+        }
+    }
+}
+
+// Implementasi fungsi untuk laporan pendapatan bulanan
 void getMonthlyRevenueReport(int month, int year) {
     int total = 0;
     for (int i = 0; i < record_count; i++) {
         int rec_year, rec_month, rec_day;
-        sscanf(records[i].date, "%d-%d-%d", &rec_year, &rec_month, &rec_day);
+        sscanf(records[i].date, "%4d-%2d-%2d", &rec_year, &rec_month, &rec_day);
         if (rec_year == year && rec_month == month) {
             total += records[i].cost;
         }
     }
-    printf("Pendapatan bulan %d-%d: Rp %d\n", month, year, total);
+    printf("Pendapatan bulan %02d/%04d: %d\n", month, year, total);
 }
 
-// Mendapatkan laporan pendapatan tahunan
+// Implementasi fungsi untuk laporan pendapatan tahunan
 void getAnnualRevenueReport(int year) {
     int total = 0;
     for (int i = 0; i < record_count; i++) {
-        int rec_year;
-        sscanf(records[i].date, "%d", &rec_year);
+        int rec_year, rec_month, rec_day;
+        sscanf(records[i].date, "%4d-%2d-%2d", &rec_year, &rec_month, &rec_day);
         if (rec_year == year) {
             total += records[i].cost;
         }
     }
-    printf("Pendapatan tahun %d: Rp %d\n", year, total);
+    printf("Pendapatan tahun %04d: %d\n", year, total);
 }
 
-// Mendapatkan rata-rata pendapatan per tahun
+// Implementasi fungsi untuk rata-rata pendapatan tahunan
 void getAverageAnnualRevenue() {
-    int total_years = 0;
-    int year_revenue[100] = {0};
-    for (int i = 0; i < record_count; i++) {
-        int rec_year;
-        sscanf(records[i].date, "%d", &rec_year);
-        year_revenue[rec_year - 2000] += records[i].cost; // Assuming data starts from year 2000
-    }
-    for (int i = 0; i < 100; i++) {
-        if (year_revenue[i] > 0) {
-            total_years++;
-        }
-    }
-    int total_revenue = 0;
-    for (int i = 0; i < 100; i++) {
-        total_revenue += year_revenue[i];
-    }
-    if (total_years > 0) {
-        printf("Rata-rata pendapatan per tahun: Rp %d\n", total_revenue / total_years);
-    } else {
-        printf("Data pendapatan tidak tersedia.\n");
-    }
-}
-
-// Menghitung jumlah pasien dan penyakit per bulan dan per tahun
-void getPatientAndDiseaseReport(int month, int year) {
-    int disease_count[100] = {0};
-    char diseases[100][100] = {0};
-    int total_diseases = 0;
-    
+    int total = 0;
+    int years = 0;
+    int current_year = 0;
     for (int i = 0; i < record_count; i++) {
         int rec_year, rec_month, rec_day;
-        sscanf(records[i].date, "%d-%d-%d", &rec_year, &rec_month, &rec_day);
+        sscanf(records[i].date, "%4d-%2d-%2d", &rec_year, &rec_month, &rec_day);
+        if (rec_year != current_year) {
+            years++;
+            current_year = rec_year;
+        }
+        total += records[i].cost;
+    }
+    if (years == 0) {
+        printf("Tidak ada data untuk dihitung.\n");
+    } else {
+        printf("Rata-rata pendapatan tahunan: %d\n", total / years);
+    }
+}
+
+// Implementasi fungsi untuk laporan pasien dan penyakit bulanan
+void getPatientAndDiseaseReport(int month, int year) {
+    printf("Laporan pasien dan penyakit bulan %02d/%04d:\n", month, year);
+    for (int i = 0; i < record_count; i++) {
+        int rec_year, rec_month, rec_day;
+        sscanf(records[i].date, "%4d-%2d-%2d", &rec_year, &rec_month, &rec_day);
         if (rec_year == year && rec_month == month) {
-            int found = 0;
-            for (int j = 0; j < total_diseases; j++) {
-                if (strcmp(diseases[j], records[i].diagnosis) == 0) {
-                    disease_count[j]++;
-                    found = 1;
-                    break;
-                }
-            }
-            if (!found) {
-                strcpy(diseases[total_diseases], records[i].diagnosis);
-                disease_count[total_diseases]++;
-                total_diseases++;
+            int patient_index = findPatientById(records[i].patient_id);
+            if (patient_index != -1) {
+                printf("Nama Pasien: %s, Diagnosis: %s\n", patients[patient_index].name, records[i].diagnosis);
             }
         }
     }
-
-    printf("Laporan Penyakit bulan %d-%d:\n", month, year);
-    for (int i = 0; i < total_diseases; i++) {
-        printf("%s: %d pasien\n", diseases[i], disease_count[i]);
-    }
 }
 
-// Fungsi tambahan untuk mendapatkan laporan per tahun
+// Implementasi fungsi untuk laporan pasien dan penyakit tahunan
 void getAnnualPatientAndDiseaseReport(int year) {
-    int disease_count[100] = {0};
-    char diseases[100][100] = {0};
-    int total_diseases = 0;
-    
+    printf("Laporan pasien dan penyakit tahun %04d:\n", year);
     for (int i = 0; i < record_count; i++) {
-        int rec_year;
-        sscanf(records[i].date, "%d", &rec_year);
+        int rec_year, rec_month, rec_day;
+        sscanf(records[i].date, "%4d-%2d-%2d", &rec_year, &rec_month, &rec_day);
         if (rec_year == year) {
-            int found = 0;
-            for (int j = 0; j < total_diseases; j++) {
-                if (strcmp(diseases[j], records[i].diagnosis) == 0) {
-                    disease_count[j]++;
-                    found = 1;
-                    break;
-                }
-            }
-            if (!found) {
-                strcpy(diseases[total_diseases], records[i].diagnosis);
-                disease_count[total_diseases]++;
-                total_diseases++;
+            int patient_index = findPatientById(records[i].patient_id);
+            if (patient_index != -1) {
+                printf("Nama Pasien: %s, Diagnosis: %s\n", patients[patient_index].name, records[i].diagnosis);
             }
         }
     }
-
-    printf("Laporan Penyakit tahun %d:\n", year);
-    for (int i = 0; i < total_diseases; i++) {
-        printf("%s: %d pasien\n", diseases[i], disease_count[i]);
-    }
 }
 
-// Menampilkan pasien yang perlu kembali kontrol
+// Implementasi fungsi untuk menampilkan pasien untuk kontrol
 void displayPatientsForControl() {
-    char current_date[11];
-    printf("Masukkan tanggal saat ini (YYYY-MM-DD): ");
-    scanf(" %s", current_date);
-    
-    printf("Pasien yang perlu kembali kontrol:\n");
+    printf("Pasien untuk kontrol:\n");
     for (int i = 0; i < record_count; i++) {
-        if (strcmp(records[i].control_date, current_date) <= 0) {
-            printf("ID Pasien: %s, Nama: %s, Tanggal Kontrol: %s\n", records[i].patient_id, patients[findPatientById(records[i].patient_id)].name, records[i].control_date);
+        if (strcmp(records[i].control_date, "") != 0) {
+            int patient_index = findPatientById(records[i].patient_id);
+            if (patient_index != -1) {
+                printf("Nama Pasien: %s, Tanggal Kontrol: %s\n", patients[patient_index].name, records[i].control_date);
+            }
         }
     }
 }
