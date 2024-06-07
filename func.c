@@ -33,6 +33,18 @@ void addPatient() {
     scanf(" %s", new_patient.patient_id);
     patients[patient_count++] = new_patient;
     printf("Pasien berhasil ditambahkan.\n");
+
+    // Append the new patient data to the CSV file
+    FILE *file = fopen("data_pasien.csv", "a");
+    if (file == NULL) {
+        printf("Gagal membuka file data_pasien.csv.\n");
+        return;
+    }
+    fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%s,%s\n",
+            new_patient.id, new_patient.name, new_patient.address, new_patient.city,
+            new_patient.birth_place, new_patient.birth_date, new_patient.age, 
+            new_patient.bpjs, new_patient.patient_id);
+    fclose(file);
 }
 
 // Mencari pasien berdasarkan ID Pasien
