@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "struct.h"
 
 Patient patients[MAX_PATIENTS];
@@ -43,7 +44,21 @@ void addPatient() {
     printf("Masukkan ID pasien (1230xxx): ");
     char input_patient_id[20];
     scanf(" %s", input_patient_id);
-    snprintf(new_patient.patient_id, sizeof(new_patient.patient_id), "KX %s", input_patient_id);
+
+    // Ambil empat digit pertama dari input_patient_id
+    char first_four_digits[5]; // 4 digit pertama + null terminator
+    if (strlen(input_patient_id) >= 4) {
+        strncpy(first_four_digits, input_patient_id, 4);
+        first_four_digits[4] = '\0'; // Pastikan null terminator
+    } else {
+        // Handle kasus di mana input kurang dari empat digit
+        // Misalnya, tambahkan leading zeros
+        snprintf(first_four_digits, sizeof(first_four_digits), "%04d", atoi(input_patient_id));
+    }
+
+    // Format ID pasien dengan "KX" diikuti oleh empat digit pertama dan tiga digit terakhir
+    snprintf(new_patient.patient_id, sizeof(new_patient.patient_id), "KX %s", first_four_digits);
+    strncat(new_patient.patient_id, input_patient_id + strlen(input_patient_id) - 3, 3); // Menambahkan tiga digit terakhir
     patients[patient_count++] = new_patient;
     printf("Pasien berhasil ditambahkan.\n");
 
