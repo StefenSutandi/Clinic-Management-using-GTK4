@@ -1,11 +1,22 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include "struct.h"
 
 Patient patients[MAX_PATIENTS];
 MedicalRecord records[MAX_RECORDS];
 int patient_count = 0;
 int record_count = 0;
+
+// Implementasi fungsi untuk mengecek duplikasi data pasien berdasarkan nama atau nomor BPJS
+bool isDuplicatePatient(const char *name, const char *bpjs) {
+    for (int i = 0; i < patient_count; i++) {
+        if (strcmp(patients[i].name, name) == 0 || strcmp(patients[i].bpjs, bpjs) == 0) {
+            return true; // Duplikat ditemukan
+        }
+    }
+    return false; // Tidak ada duplikat
+}
 
 // Menambah pasien baru
 void addPatient() {
@@ -27,10 +38,12 @@ void addPatient() {
     scanf(" %s", new_patient.birth_date);
     printf("Masukkan umur: ");
     scanf("%d", &new_patient.age);
-    printf("Masukkan nomor BPJS: ");
+    printf("Masukkan nomor BPJS (1234567xxxx): ");
     scanf(" %s", new_patient.bpjs);
-    printf("Masukkan ID pasien: ");
-    scanf(" %s", new_patient.patient_id);
+    printf("Masukkan ID pasien (1230xxx): ");
+    char input_patient_id[20];
+    scanf(" %s", input_patient_id);
+    snprintf(new_patient.patient_id, sizeof(new_patient.patient_id), "KX %s", input_patient_id);
     patients[patient_count++] = new_patient;
     printf("Pasien berhasil ditambahkan.\n");
 
