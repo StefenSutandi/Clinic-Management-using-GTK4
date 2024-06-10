@@ -4,12 +4,6 @@
 #include <stdlib.h>
 #include "struct.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include "struct.h"
-
 Patient patients[MAX_PATIENTS];
 MedicalRecord records[MAX_RECORDS];
 int patient_count = 0;
