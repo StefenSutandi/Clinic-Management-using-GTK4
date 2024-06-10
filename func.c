@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include "struct.h"
 
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include "struct.h"
+
 Patient patients[MAX_PATIENTS];
 MedicalRecord records[MAX_RECORDS];
 int patient_count = 0;
@@ -27,52 +33,65 @@ void addPatient() {
     }
     Patient new_patient;
     new_patient.id = patient_count + 1;
-    printf("Masukkan nama pasien: ");
+
+    printf("Masukkan nama lengkap pasien: ");
     scanf(" %[^\n]", new_patient.name);
+
     printf("Masukkan alamat: ");
     scanf(" %[^\n]", new_patient.address);
-    printf("Masukkan kota: ");
+
+    printf("Masukkan kota (contoh: Kota Palembang): ");
     scanf(" %[^\n]", new_patient.city);
-    printf("Masukkan tempat lahir: ");
+
+    printf("Masukkan tempat lahir (contoh: Kota Batam): ");
     scanf(" %[^\n]", new_patient.birth_place);
-    printf("Masukkan tanggal lahir (YYYY-MM-DD): ");
-    scanf(" %s", new_patient.birth_date);
+
+    printf("Masukkan tanggal lahir (contoh: 28 April 1973): ");
+    int day, year;
+    char month[MAX_STRING_LENGTH];
+    scanf("%d %s %d", &day, month, &year);
+
+    // Format tanggal lahir dalam format Tanggal Bulan Tahun untuk penyimpanan
+    snprintf(new_patient.birth_date, sizeof(new_patient.birth_date), "%d %s %d", day, month, year);
+
     printf("Masukkan umur: ");
     scanf("%d", &new_patient.age);
-    printf("Masukkan nomor BPJS (1234567xxxx): ");
+
+    printf("Masukkan nomor BPJS (format: 1234567xxx): ");
     scanf(" %s", new_patient.bpjs);
-    printf("Masukkan ID pasien (1230xxx): ");
-    char input_patient_id[20];
+
+    printf("Masukkan ID pasien (format: 1230xxx): ");
+    char input_patient_id[MAX_STRING_LENGTH];
     scanf(" %s", input_patient_id);
 
-    // Ambil empat digit pertama dari input_patient_id
-    char first_four_digits[5]; // 4 digit pertama + null terminator
-    if (strlen(input_patient_id) >= 4) {
-        strncpy(first_four_digits, input_patient_id, 4);
-        first_four_digits[4] = '\0'; // Pastikan null terminator
+    // Format patient_id sesuai aturan yang diinginkan
+    snprintf(new_patient.patient_id, sizeof(new_patient.patient_id), "KX %s", input_patient_id);
+
+    if (isDuplicatePatient(new_patient.name, new_patient.bpjs)) {
+        printf("Pasien dengan nama atau nomor BPJS tersebut sudah ada.\n");
     } else {
-        // Handle kasus di mana input kurang dari empat digit
-        // Misalnya, tambahkan leading zeros
-        snprintf(first_four_digits, sizeof(first_four_digits), "%04d", atoi(input_patient_id));
-    }
+        patients[patient_count] = new_patient;
+        patient_count++;
+        printf("Pasien berhasil ditambahkan.\n");
 
-    // Format ID pasien dengan "KX" diikuti oleh empat digit pertama dan tiga digit terakhir
-    snprintf(new_patient.patient_id, sizeof(new_patient.patient_id), "KX %s", first_four_digits);
-    strncat(new_patient.patient_id, input_patient_id + strlen(input_patient_id) - 3, 3); // Menambahkan tiga digit terakhir
-    patients[patient_count++] = new_patient;
-    printf("Pasien berhasil ditambahkan.\n");
-
-    // Append the new patient data to the CSV file
-    FILE *file = fopen("data_pasien.csv", "a");
-    if (file == NULL) {
-        printf("Gagal membuka file data_pasien.csv.\n");
-        return;
+        // Tulis data pasien ke file CSV
+        FILE *file = fopen("data_pasien.csv", "a");
+        if (file == NULL) {
+            printf("Gagal membuka file data_pasien.csv\n");
+            return;
+        }
+        fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%s,%s\n",
+                new_patient.id,
+                new_patient.name,
+                new_patient.address,
+                new_patient.city,
+                new_patient.birth_place,
+                new_patient.birth_date,
+                new_patient.age,
+                new_patient.bpjs,
+                new_patient.patient_id);
+        fclose(file);
     }
-    fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%s,%s\n",
-            new_patient.id, new_patient.name, new_patient.address, new_patient.city,
-            new_patient.birth_place, new_patient.birth_date, new_patient.age, 
-            new_patient.bpjs, new_patient.patient_id);
-    fclose(file);
 }
 
 // Mencari pasien berdasarkan ID Pasien
