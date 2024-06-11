@@ -256,22 +256,57 @@ void addMedicalRecord() {
         printf("Data riwayat medis penuh.\n");
         return;
     }
+
     MedicalRecord new_record;
     new_record.id = record_count + 1;
-    printf("Masukkan tanggal (YYYY-MM-DD): ");
-    scanf(" %s", new_record.date);
+    
+    printf("Masukkan tanggal (contoh: 1 Januari 2022): ");
+    scanf(" %[^\n]", new_record.date);
+    
     printf("Masukkan ID pasien: ");
     scanf(" %s", new_record.patient_id);
+    
     printf("Masukkan diagnosis: ");
     scanf(" %[^\n]", new_record.diagnosis);
+    
     printf("Masukkan tindakan: ");
     scanf(" %[^\n]", new_record.treatment);
-    printf("Masukkan tanggal kontrol (YYYY-MM-DD): ");
-    scanf(" %s", new_record.control_date);
+    
+    printf("Masukkan tanggal kontrol (contoh: 4 Januari 2022): ");
+    scanf(" %[^\n]", new_record.control_date);
+    
     printf("Masukkan biaya: ");
     scanf("%d", &new_record.cost);
+
     records[record_count++] = new_record;
     printf("Riwayat medis berhasil ditambahkan.\n");
+
+    // Buka file CSV untuk menulis ulang data rekam medis
+    FILE *file = fopen("riwayat_datang.csv", "w");
+    if (file == NULL) {
+        printf("Gagal membuka file riwayat_datang.csv\n");
+        return;
+    }
+
+    // Tulis kembali template header
+    fprintf(file, "No,Tanggal,ID Pasien,Diagnosis,Tindakan,Kontrol,Biaya (Rp)\n");
+
+    // Tulis ulang data rekam medis ke file CSV
+    for (int i = 0; i < record_count; i++) {
+        MedicalRecord mr = records[i];
+
+        // Tulis data rekam medis ke file CSV
+        fprintf(file, "%d,%s,%s,%s,%s,%s,%d\n",
+                mr.id,
+                mr.date,
+                mr.patient_id,
+                mr.diagnosis,
+                mr.treatment,
+                mr.control_date,
+                mr.cost);
+    }
+
+    fclose(file);
 }
 
 // Mencari riwayat medis berdasarkan ID
@@ -295,19 +330,46 @@ void updateMedicalRecord() {
         return;
     }
     MedicalRecord *r = &records[index];
-    printf("Masukkan tanggal baru (YYYY-MM-DD): ");
-    scanf(" %s", r->date);
+    printf("Masukkan tanggal baru (contoh: 1 Januari 2022): ");
+    scanf(" %[^\n]", r->date);
     printf("Masukkan ID pasien baru: ");
     scanf(" %s", r->patient_id);
     printf("Masukkan diagnosis baru: ");
     scanf(" %[^\n]", r->diagnosis);
     printf("Masukkan tindakan baru: ");
     scanf(" %[^\n]", r->treatment);
-    printf("Masukkan tanggal kontrol baru (YYYY-MM-DD): ");
-    scanf(" %s", r->control_date);
+    printf("Masukkan tanggal kontrol baru (contoh: 4 Januari 2022): ");
+    scanf(" %[^\n]", r->control_date);
     printf("Masukkan biaya baru: ");
     scanf("%d", &r->cost);
     printf("Riwayat medis berhasil diubah.\n");
+
+    // Buka file CSV untuk menulis ulang data rekam medis
+    FILE *file = fopen("riwayat_datang.csv", "w");
+    if (file == NULL) {
+        printf("Gagal membuka file riwayat_datang.csv\n");
+        return;
+    }
+
+    // Tulis kembali template header
+    fprintf(file, "No,Tanggal,ID Pasien,Diagnosis,Tindakan,Kontrol,Biaya (Rp)\n");
+
+    // Tulis ulang data rekam medis ke file CSV
+    for (int i = 0; i < record_count; i++) {
+        MedicalRecord mr = records[i];
+
+        // Tulis data rekam medis ke file CSV
+        fprintf(file, "%d,%s,%s,%s,%s,%s,%d\n",
+                mr.id,
+                mr.date,
+                mr.patient_id,
+                mr.diagnosis,
+                mr.treatment,
+                mr.control_date,
+                mr.cost);
+    }
+
+    fclose(file);
 }
 
 // Menghapus riwayat medis
