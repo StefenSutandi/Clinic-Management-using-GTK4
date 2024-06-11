@@ -312,19 +312,60 @@ void updateMedicalRecord() {
 
 // Menghapus riwayat medis
 void deleteMedicalRecord() {
-    int id;
-    printf("Masukkan ID riwayat medis yang ingin dihapus: ");
-    scanf("%d", &id);
-    int index = findMedicalRecordById(id);
+    char record_id[15];
+    printf("Masukkan ID rekam medis yang ingin dihapus: ");
+    scanf(" %s", record_id);
+
+    int index = findMedicalRecordById(atoi(record_id));
     if (index == -1) {
-        printf("Riwayat medis tidak ditemukan.\n");
+        printf("Rekam medis tidak ditemukan.\n");
         return;
     }
+
     for (int i = index; i < record_count - 1; i++) {
         records[i] = records[i + 1];
     }
     record_count--;
-    printf("Riwayat medis berhasil dihapus.\n");
+    printf("Rekam medis berhasil dihapus.\n");
+
+    // Buka file CSV untuk menulis ulang data rekam medis
+    FILE *file = fopen("riwayat_datang.csv", "w");
+    if (file == NULL) {
+        printf("Gagal membuka file riwayat_datang.csv\n");
+        return;
+    }
+
+    // Tulis kembali template header
+    fprintf(file, "No,Tanggal,ID Pasien,Diagnosis,Tindakan,Kontrol,Biaya (Rp)\n");
+
+    // Tulis ulang data rekam medis ke file CSV
+    for (int i = 0; i < record_count; i++) {
+        MedicalRecord mr = records[i];
+        int year, month, day;
+        sscanf(mr.date, "%4d-%2d-%2d", &year, &month, &day);
+
+        const char *month_name = getMonthName(month);
+        char original_date[MAX_STRING_LENGTH];
+        snprintf(original_date, sizeof(original_date), "%d %s %d", day, month_name, year);
+
+        // Mendapatkan tanggal kontrol dalam format yang sama persis dengan tanggal
+        sscanf(mr.control_date, "%4d-%2d-%2d", &year, &month, &day);
+        const char *control_month_name = getMonthName(month);
+        char original_control_date[MAX_STRING_LENGTH];
+        snprintf(original_control_date, sizeof(original_control_date), "%d %s %d", day, control_month_name, year);
+
+        // Tulis data rekam medis ke file CSV
+        fprintf(file, "%d,%s,%s,%s,%s,%s,%d\n",
+                mr.id,
+                original_date,
+                mr.patient_id,
+                mr.diagnosis,
+                mr.treatment,
+                original_control_date, // Menggunakan tanggal kontrol dengan format yang sama persis dengan tanggal
+                mr.cost);
+    }
+
+    fclose(file);
 }
 
 // Menampilkan riwayat medis
