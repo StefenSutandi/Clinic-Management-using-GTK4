@@ -159,9 +159,12 @@ void updatePatient() {
         printf("Gagal membuka file data_pasien.csv\n");
         return;
     }
+    fprintf(file, "No,Nama Lengkap,Alamat,Kota,Tempat Lahir,Tanggal Lahir,Umur (th),No BPJS,ID Pasien\n");
     for (int i = 0; i < patient_count; i++) {
         Patient pt = patients[i];
-        fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%s,%s,%s\n",
+        char id[MAX_STRING_LENGTH] = "KX ";
+        strcat(id, pt.patient_id);
+        fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%s,%s\n",
                 pt.id,
                 pt.name,
                 pt.address,
@@ -170,8 +173,7 @@ void updatePatient() {
                 original_date, // Menulis kembali dalam format asli
                 pt.age,
                 pt.bpjs,
-                "KX",
-                pt.patient_id + 3); // Menghindari menulis kembali KX dua kali
+                id); // Menghindari menulis kembali KX dua kali
     }
     fclose(file);
 }
