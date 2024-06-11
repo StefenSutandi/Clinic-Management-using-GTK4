@@ -5,6 +5,7 @@
 #define MAX_RECORDS 100
 #define MAX_LINE_LENGTH 1024
 #define MAX_STRING_LENGTH 100
+#define MAX_FIELD_LENGTH 100
 
 typedef struct {
     int id;

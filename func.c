@@ -88,6 +88,24 @@ void addPatient() {
     }
 }
 
+const char* getMonthName(int month) {
+    switch (month) {
+        case 1: return "Januari";
+        case 2: return "Februari";
+        case 3: return "Maret";
+        case 4: return "April";
+        case 5: return "Mei";
+        case 6: return "Juni";
+        case 7: return "Juli";
+        case 8: return "Agustus";
+        case 9: return "September";
+        case 10: return "Oktober";
+        case 11: return "November";
+        case 12: return "Desember";
+        default: return "";
+    }
+}
+
 // Mencari pasien berdasarkan ID Pasien
 int findPatientById(const char* patient_id) {
     for (int i = 0; i < patient_count; i++) {
@@ -109,6 +127,7 @@ void updatePatient() {
         return;
     }
     Patient *p = &patients[index];
+
     printf("Masukkan nama baru: ");
     scanf(" %[^\n]", p->name);
     printf("Masukkan alamat baru: ");
@@ -117,30 +136,96 @@ void updatePatient() {
     scanf(" %[^\n]", p->city);
     printf("Masukkan tempat lahir baru: ");
     scanf(" %[^\n]", p->birth_place);
-    printf("Masukkan tanggal lahir baru (YYYY-MM-DD): ");
-    scanf(" %s", p->birth_date);
+
+    printf("Masukkan tanggal lahir baru (contoh: 28 April 1973): ");
+    int day, year;
+    char month[MAX_STRING_LENGTH];
+    char original_date[MAX_STRING_LENGTH];
+    scanf("%d %s %d", &day, month, &year);
+    snprintf(original_date, sizeof(original_date), "%d %s %d", day, month, year);
+    snprintf(p->birth_date, sizeof(p->birth_date), "%d-%s-%d", year, month, day); // Menyimpan dalam format YYYY-MM-DD
+
     printf("Masukkan umur baru: ");
     scanf("%d", &p->age);
+
     printf("Masukkan nomor BPJS baru: ");
     scanf(" %s", p->bpjs);
+
     printf("Data pasien berhasil diubah.\n");
+
+    // Perbarui data pasien di file CSV
+    FILE *file = fopen("data_pasien.csv", "w");
+    if (file == NULL) {
+        printf("Gagal membuka file data_pasien.csv\n");
+        return;
+    }
+    for (int i = 0; i < patient_count; i++) {
+        Patient pt = patients[i];
+        fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%s,%s,%s\n",
+                pt.id,
+                pt.name,
+                pt.address,
+                pt.city,
+                pt.birth_place,
+                original_date, // Menulis kembali dalam format asli
+                pt.age,
+                pt.bpjs,
+                "KX",
+                pt.patient_id + 3); // Menghindari menulis kembali KX dua kali
+    }
+    fclose(file);
 }
 
-// Menghapus pasien
 void deletePatient() {
     char patient_id[15];
     printf("Masukkan ID pasien yang ingin dihapus: ");
     scanf(" %s", patient_id);
+
     int index = findPatientById(patient_id);
     if (index == -1) {
         printf("Pasien tidak ditemukan.\n");
         return;
     }
+
     for (int i = index; i < patient_count - 1; i++) {
         patients[i] = patients[i + 1];
     }
     patient_count--;
     printf("Pasien berhasil dihapus.\n");
+
+    // Buka file CSV untuk menulis ulang data pasien
+    FILE *file = fopen("data_pasien.csv", "w");
+    if (file == NULL) {
+        printf("Gagal membuka file data_pasien.csv\n");
+        return;
+    }
+
+    // Tulis kembali template header
+    fprintf(file, "No,Nama Lengkap,Alamat,Kota,Tempat Lahir,Tanggal Lahir,Umur (th),No BPJS,ID Pasien\n");
+    
+    // Tulis ulang data pasien ke file CSV
+    for (int i = 0; i < patient_count; i++) {
+        Patient pt = patients[i];
+        int year, month, day;
+        sscanf(pt.birth_date, "%4d-%2d-%2d", &year, &month, &day);
+        
+        const char *month_name = getMonthName(month);
+        char original_date[MAX_STRING_LENGTH];
+        snprintf(original_date, sizeof(original_date), "%d %s %d", day, month_name, year);
+        
+        fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%s,%s\n",
+                pt.id,
+                pt.name,
+                pt.address,
+                pt.city,
+                pt.birth_place,
+                original_date, // Menulis kembali dalam format asli
+                pt.age,
+                pt.bpjs,
+                pt.patient_id); // Menulis kembali ID pasien tanpa modifikasi
+    }
+
+    fclose(file);
 }
 
 // Menampilkan informasi pasien
@@ -244,22 +329,25 @@ void deleteMedicalRecord() {
 
 // Menampilkan riwayat medis
 void displayMedicalRecord() {
-    int id;
-    printf("Masukkan ID riwayat medis: ");
-    scanf("%d", &id);
-    int index = findMedicalRecordById(id);
-    if (index == -1) {
-        printf("Riwayat medis tidak ditemukan.\n");
-        return;
+    char id_str[20];
+    printf("Masukkan ID pasien: ");
+    scanf("%s", id_str);
+    int found = 0;
+    for (int i = 0; i < record_count; i++) {
+        if (strcmp(records[i].patient_id, id_str) == 0) {
+            printf("ID: %d\n", records[i].id);
+            printf("Tanggal: %s\n", records[i].date);
+            printf("ID Pasien: %s\n", records[i].patient_id);
+            printf("Diagnosis: %s\n", records[i].diagnosis);
+            printf("Tindakan: %s\n", records[i].treatment);
+            printf("Tanggal Kontrol: %s\n", records[i].control_date);
+            printf("Biaya: %d\n", records[i].cost);
+            found = 1;
+        }
     }
-    MedicalRecord r = records[index];
-    printf("ID: %d\n", r.id);
-    printf("Tanggal: %s\n", r.date);
-    printf("ID Pasien: %s\n", r.patient_id);
-    printf("Diagnosis: %s\n", r.diagnosis);
-    printf("Tindakan: %s\n", r.treatment);
-    printf("Tanggal Kontrol: %s\n", r.control_date);
-    printf("Biaya: %d\n", r.cost);
+    if (!found) {
+        printf("Riwayat medis tidak ditemukan untuk ID pasien tersebut.\n");
+    }
 }
 
 // Menampilkan informasi pasien beserta riwayat medisnya
