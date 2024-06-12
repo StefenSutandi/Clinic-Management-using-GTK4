@@ -66,8 +66,7 @@ void addPatient() {
     if (isDuplicatePatient(new_patient.name, new_patient.bpjs)) {
         printf("Pasien dengan nama atau nomor BPJS tersebut sudah ada.\n");
     } else {
-        patients[patient_count] = new_patient;
-        patient_count++;
+        patients[patient_count++] = new_patient;
         printf("Pasien berhasil ditambahkan.\n");
 
         // Tulis data pasien ke file CSV
@@ -335,7 +334,7 @@ void addMedicalRecord() {
         char original_control_date[MAX_STRING_LENGTH];
         snprintf(original_control_date, sizeof(original_control_date), "%d %s %d", day, month_name, year);
 
-        char id[MAX_STRING_LENGTH] = "KX";
+        char id[MAX_STRING_LENGTH] = "KX ";
         strcat(id, mr.patient_id);
 
         // Tulis data rekam medis ke file CSV
@@ -373,8 +372,20 @@ void updateMedicalRecord() {
         return;
     }
     MedicalRecord *r = &records[index];
+    
     printf("Masukkan tanggal baru (contoh: 1 Januari 2022): ");
-    scanf(" %[^\n]", r->date);
+    int day, year;
+    char month[MAX_STRING_LENGTH];
+    int month_number = 0;
+    scanf("%d %s %d", &day, month, &year);
+    for (month_number = 0; month_number < 12; month_number++){
+        if (strcmp(months[month_number], month) == 0){
+            month_number = month_number + 1;
+            break;
+        }
+    }
+    snprintf(r->date, sizeof(r->date), "%d-%d-%d", year, month_number, day);
+
     printf("Masukkan ID pasien baru: ");
     scanf(" %s", r->patient_id);
     printf("Masukkan diagnosis baru: ");
@@ -382,7 +393,15 @@ void updateMedicalRecord() {
     printf("Masukkan tindakan baru: ");
     scanf(" %[^\n]", r->treatment);
     printf("Masukkan tanggal kontrol baru (contoh: 4 Januari 2022): ");
-    scanf(" %[^\n]", r->control_date);
+    scanf("%d %s %d", &day, month, &year);
+    for (month_number = 0; month_number < 12; month_number++){
+        if (strcmp(months[month_number], month) == 0){
+            month_number = month_number + 1;
+            break;
+        }
+    }
+    snprintf(r->control_date, sizeof(r->control_date), "%d-%d-%d", year, month_number, day);
+
     printf("Masukkan biaya baru: ");
     scanf("%d", &r->cost);
     printf("Riwayat medis berhasil diubah.\n");
@@ -400,15 +419,31 @@ void updateMedicalRecord() {
     // Tulis ulang data rekam medis ke file CSV
     for (int i = 0; i < record_count; i++) {
         MedicalRecord mr = records[i];
+        int year, month, day;
+        sscanf(mr.date, "%4d-%2d-%2d", &year, &month, &day);
+
+        char month_name[MAX_STRING_LENGTH];
+        strcpy(month_name, months[month-1]);
+        char original_date[MAX_STRING_LENGTH];
+        snprintf(original_date, sizeof(original_date), "%d %s %d", day, month_name, year);
+
+        sscanf(mr.control_date, "%4d-%2d-%2d", &year, &month, &day);
+        strcpy(month_name, months[month-1]);
+        
+        char original_control_date[MAX_STRING_LENGTH];
+        snprintf(original_control_date, sizeof(original_control_date), "%d %s %d", day, month_name, year);
+
+        char id[MAX_STRING_LENGTH] = "KX ";
+        strcat(id, mr.patient_id);
 
         // Tulis data rekam medis ke file CSV
         fprintf(file, "%d,%s,%s,%s,%s,%s,%d\n",
                 mr.id,
-                mr.date,
-                mr.patient_id,
+                original_date,
+                id,
                 mr.diagnosis,
                 mr.treatment,
-                mr.control_date,
+                original_control_date,
                 mr.cost);
     }
 
