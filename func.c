@@ -8,6 +8,8 @@ Patient patients[MAX_PATIENTS];
 MedicalRecord records[MAX_RECORDS];
 int patient_count = 0;
 int record_count = 0;
+const char * months[12] = {"Januari", "Februari", "Maret", "April", "May", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+
 
 // Implementasi fungsi untuk mengecek duplikasi data pasien berdasarkan nama atau nomor BPJS
 bool isDuplicatePatient(const char *name, const char *bpjs) {
@@ -151,6 +153,8 @@ void updatePatient() {
     printf("Masukkan nomor BPJS baru: ");
     scanf(" %s", p->bpjs);
 
+
+
     printf("Data pasien berhasil diubah.\n");
 
     // Perbarui data pasien di file CSV
@@ -173,7 +177,7 @@ void updatePatient() {
                 original_date, // Menulis kembali dalam format asli
                 pt.age,
                 pt.bpjs,
-                id); // Menghindari menulis kembali KX dua kali
+                id);
     }
     fclose(file);
 }
@@ -263,7 +267,19 @@ void addMedicalRecord() {
     new_record.id = record_count + 1;
     
     printf("Masukkan tanggal (contoh: 1 Januari 2022): ");
-    scanf(" %[^\n]", new_record.date);
+    int day, year;
+    char month[MAX_STRING_LENGTH];
+    int month_number = 0;
+    scanf("%d %s %d", &day, month, &year);
+    for (month_number; month_number < 12; month_number++){
+        if (strcmp(months[month_number], month) == 0){
+            month_number = month_number + 1;
+            break;
+        }
+    }
+
+    // Format tanggal lahir dalam format Tanggal Bulan Tahun untuk penyimpanan
+    snprintf(new_record.date, sizeof(new_record.date), "%d-%d-%d", year, month_number, day);
     
     printf("Masukkan ID pasien: ");
     scanf(" %s", new_record.patient_id);
@@ -275,7 +291,16 @@ void addMedicalRecord() {
     scanf(" %[^\n]", new_record.treatment);
     
     printf("Masukkan tanggal kontrol (contoh: 4 Januari 2022): ");
-    scanf(" %[^\n]", new_record.control_date);
+    scanf("%d %s %d", &day, month, &year);
+    for (month_number = 0; month_number < 12; month_number++){
+        if (strcmp(months[month_number], month) == 0){
+            month_number = month_number + 1;
+            break;
+        }
+    }
+
+    // Format tanggal lahir dalam format Tanggal Bulan Tahun untuk penyimpanan
+    snprintf(new_record.control_date, sizeof(new_record.control_date), "%d-%d-%d", year, month_number, day);
     
     printf("Masukkan biaya: ");
     scanf("%d", &new_record.cost);
@@ -296,15 +321,31 @@ void addMedicalRecord() {
     // Tulis ulang data rekam medis ke file CSV
     for (int i = 0; i < record_count; i++) {
         MedicalRecord mr = records[i];
+        int year, month, day;
+        sscanf(mr.date, "%4d-%2d-%2d", &year, &month, &day);
+
+        char month_name[MAX_STRING_LENGTH];
+        strcpy(month_name, months[month-1]);
+        char original_date[MAX_STRING_LENGTH];
+        snprintf(original_date, sizeof(original_date), "%d %s %d", day, month_name, year);
+
+        sscanf(mr.control_date, "%4d-%2d-%2d", &year, &month, &day);
+        strcpy(month_name, months[month-1]);
+        
+        char original_control_date[MAX_STRING_LENGTH];
+        snprintf(original_control_date, sizeof(original_control_date), "%d %s %d", day, month_name, year);
+
+        char id[MAX_STRING_LENGTH] = "KX";
+        strcat(id, mr.patient_id);
 
         // Tulis data rekam medis ke file CSV
         fprintf(file, "%d,%s,%s,%s,%s,%s,%d\n",
                 mr.id,
-                mr.date,
-                mr.patient_id,
+                original_date,
+                id,
                 mr.diagnosis,
                 mr.treatment,
-                mr.control_date,
+                original_control_date,
                 mr.cost);
     }
 
