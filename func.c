@@ -8,7 +8,7 @@ Patient patients[MAX_PATIENTS];
 MedicalRecord records[MAX_RECORDS];
 int patient_count = 0;
 int record_count = 0;
-const char * months[12] = {"Januari", "Februari", "Maret", "April", "May", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+const char * months[12] = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
 
 
 // Implementasi fungsi untuk mengecek duplikasi data pasien berdasarkan nama atau nomor BPJS
@@ -43,12 +43,19 @@ void addPatient() {
     scanf(" %[^\n]", new_patient.birth_place);
 
     printf("Masukkan tanggal lahir (contoh: 28 April 1973): ");
-    int day, year;
+    int day, year, month_number;
+    char originalDate[MAX_STRING_LENGTH];
     char month[MAX_STRING_LENGTH];
     scanf("%d %s %d", &day, month, &year);
+    snprintf(originalDate, sizeof(originalDate), "%d %s %d", day, month, year);
 
-    // Format tanggal lahir dalam format Tanggal Bulan Tahun untuk penyimpanan
-    snprintf(new_patient.birth_date, sizeof(new_patient.birth_date), "%d %s %d", day, month, year);
+    for(month_number = 0; month_number < 12 ; month_number++){
+        if (strcmp(month, months[month_number]) == 0){
+            month_number++;
+            break;
+        }
+    }
+    snprintf(new_patient.birth_date, sizeof(new_patient.birth_date), "%d-%d-%d", year, month_number, day);
 
     printf("Masukkan umur: ");
     scanf("%d", &new_patient.age);
@@ -57,11 +64,10 @@ void addPatient() {
     scanf(" %s", new_patient.bpjs);
 
     printf("Masukkan ID pasien (format: 1230xxx): ");
-    char input_patient_id[MAX_STRING_LENGTH];
-    scanf(" %s", input_patient_id);
-
-    // Format patient_id sesuai aturan yang diinginkan
-    snprintf(new_patient.patient_id, sizeof(new_patient.patient_id), "KX %s", input_patient_id);
+    scanf(" %s", new_patient.patient_id);
+    char storedID[MAX_STRING_LENGTH];
+    strcpy(storedID, "KX ");
+    strcat(storedID, new_patient.patient_id);
 
     if (isDuplicatePatient(new_patient.name, new_patient.bpjs)) {
         printf("Pasien dengan nama atau nomor BPJS tersebut sudah ada.\n");
@@ -81,10 +87,10 @@ void addPatient() {
                 new_patient.address,
                 new_patient.city,
                 new_patient.birth_place,
-                new_patient.birth_date,
+                originalDate,
                 new_patient.age,
                 new_patient.bpjs,
-                new_patient.patient_id);
+                storedID);
         fclose(file);
     }
 }
@@ -139,12 +145,17 @@ void updatePatient() {
     scanf(" %[^\n]", p->birth_place);
 
     printf("Masukkan tanggal lahir baru (contoh: 28 April 1973): ");
-    int day, year;
+    int day, year, month_number;
     char month[MAX_STRING_LENGTH];
-    char original_date[MAX_STRING_LENGTH];
     scanf("%d %s %d", &day, month, &year);
-    snprintf(original_date, sizeof(original_date), "%d %s %d", day, month, year);
-    snprintf(p->birth_date, sizeof(p->birth_date), "%d-%s-%d", year, month, day); // Menyimpan dalam format YYYY-MM-DD
+    for(month_number = 0 ; month_number < 12 ; month_number++){
+        if (strcmp(month, months[month_number]) == 0){
+            month_number++;
+            break;
+        }
+    }
+    
+    snprintf(p->birth_date, sizeof(p->birth_date), "%d-%d-%d", year, month_number, day);
 
     printf("Masukkan umur baru: ");
     scanf("%d", &p->age);
@@ -165,6 +176,14 @@ void updatePatient() {
     fprintf(file, "No,Nama Lengkap,Alamat,Kota,Tempat Lahir,Tanggal Lahir,Umur (th),No BPJS,ID Pasien\n");
     for (int i = 0; i < patient_count; i++) {
         Patient pt = patients[i];
+        
+        int year, month, day;
+        sscanf(pt.birth_date, "%4d-%2d-%2d", &year, &month, &day);
+        
+        const char *month_name = getMonthName(month);
+        char original_date[MAX_STRING_LENGTH];
+        snprintf(original_date, sizeof(original_date), "%d %s %d", day, month_name, year);
+
         char id[MAX_STRING_LENGTH] = "KX ";
         strcat(id, pt.patient_id);
         fprintf(file, "%d,%s,%s,%s,%s,%s,%d,%s,%s\n",
@@ -173,7 +192,7 @@ void updatePatient() {
                 pt.address,
                 pt.city,
                 pt.birth_place,
-                original_date, // Menulis kembali dalam format asli
+                original_date,
                 pt.age,
                 pt.bpjs,
                 id);
