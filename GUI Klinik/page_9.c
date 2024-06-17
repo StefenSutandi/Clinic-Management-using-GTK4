@@ -13,7 +13,7 @@ GtkWidget *AnnualShow9;
 typedef struct {
     char name[50];
     int count;
-} diseasekind;
+} diseaseKind;
 
 //Deklarasi grid untuk menampilkan data pasien dan riwayat medis
 GtkWidget *ScrollGrid9;
@@ -34,6 +34,7 @@ GtkWidget* Page_9() {
     GtkWidget* BackButton = iconButton("icons/back.png", "Kembali ke menu utama", "back-button", "back-title");
     gtk_widget_set_size_request(BackButton, 240, 60);
     g_signal_connect(BackButton, "clicked", G_CALLBACK(on_go_to_main), NULL);
+    gtk_fixed_put(GTK_FIXED(fixed), BackButton, 60, 50);
 
     GtkWidget *month_spin;
     GtkAdjustment *month_adj = gtk_adjustment_new(1, 1, 12, 1, 1, 0);
@@ -64,6 +65,7 @@ GtkWidget* Page_9() {
 
     AnnualShow9 = gtk_label_new("");
     gtk_widget_set_size_request(AnnualShow9, 500, 50);
+    gtk_fixed_put(GTK_FIXED(fixed), AnnualShow9, 400, 350);
 
     // Membuat grid untuk menampilkan data pasien dan riwayat medis bulanan
     ScrollGrid9 = gtk_grid_new();

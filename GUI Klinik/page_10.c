@@ -16,6 +16,7 @@ GtkWidget *name_show10;
 GtkWidget *adress_show10;
 GtkWidget *city_show10;
 GtkWidget *birth_place_show10;
+GtkWidget *birth_date_show10;
 GtkWidget *age_show10;
 GtkWidget *bpjs_show10;
 GtkWidget *patient_id_show10;
@@ -40,6 +41,7 @@ GtkWidget* Page_10() {
     //Membuat tombol untuk menampilkan data pasien berikutnya
     GtkWidget* nextButton = NextButton("icons/next.png", "Data Pasien Berikutnya", "back-button", "back-title");
     gtk_widget_set_size_request(nextButton, 100, 60);
+    gtk_fixed_put(GTK_FIXED(fixed), nextButton, 960, 100);
 
     //Memanggil fungsi button_next ketika tombol ditekan
     g_signal_connect(nextButton, "clicked", G_CALLBACK(button_next), NULL);
@@ -58,6 +60,7 @@ GtkWidget* Page_10() {
     gtk_grid_set_row_homogeneous(GTK_GRID(grid), TRUE);
     gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
     gtk_box_append(GTK_BOX(boxgrid), grid);
+    gtk_fixed_put(GTK_FIXED(fixed), boxgrid, 300, 240);
 
     //Menambahkan data pasien ke dalam grid
     name_show10 = gtk_label_new("");
@@ -115,6 +118,8 @@ GtkWidget* Page_10() {
     //Membuat supaya grid dapat digeser
     GtkWidget *scrolled_window = gtk_scrolled_window_new();
     gtk_widget_set_size_request(scrolled_window,550,400);
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled_window), ScrollGrid10);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_fixed_put(GTK_FIXED(fixed), scrolled_window, 650, 300);
     displayAllPatientsAndRecords();
 

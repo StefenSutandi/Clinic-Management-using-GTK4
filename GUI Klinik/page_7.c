@@ -21,16 +21,19 @@ GtkWidget* Page_7() {
     GtkWidget* BackButton = iconButton("icons/back.png", "Kembali ke menu utama", "back-button", "back-title");
     gtk_widget_set_size_request(BackButton, 240, 60);
     g_signal_connect(BackButton, "clicked", G_CALLBACK(on_go_to_main), NULL);
+    gtk_fixed_put(GTK_FIXED(fixed), BackButton, 60, 50);
 
     // Membuat box entries untuk input ID
     GtkWidget *id_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_size_request(id_box, 500, 50);
     GtkWidget *inputID = gtk_entry_new();
     setinput(inputID, "Masukkan ID riwayat medis yang ingin dihapus:", id_box, "icons/id.png");
+    gtk_fixed_put(GTK_FIXED(fixed), id_box, 330, 160);
 
     //Membuat tombol untuk menghapus riwayat medis
     GtkWidget* show_button = iconButton("icons/trash.png", "Hapus Riwayat Medis", "find-button", "find-title");
     gtk_widget_set_size_request(show_button,150,50);
+    gtk_fixed_put(GTK_FIXED(fixed), show_button, 860, 176);
 
     //Memanggil fungsi deleteMedicalRecord ketika tombol ditekan
     g_signal_connect(show_button, "clicked", G_CALLBACK(deleteMedicalRecord), inputID);
@@ -52,11 +55,12 @@ GtkWidget* deleteMedicalRecord(GtkButton *button, gpointer user_data) {
 
     // Mendapatkan data dari input ID
     GtkWidget *entry = GTK_WIDGET(user_data);
-    gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE_LABEL(entry)));
+    gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE(entry)));
     GtkEntryBuffer *bufferId = gtk_entry_get_buffer(GTK_ENTRY(entry));
 
     // Mencari riwayat medis berdasarkan ID
     char temp_id[5];
+    g_strlcpy(temp_id, data, sizeof(temp_id));
     int record_id = atoi(temp_id);
     int indexRecord7 = findMedicalRecordById(record_id);
 

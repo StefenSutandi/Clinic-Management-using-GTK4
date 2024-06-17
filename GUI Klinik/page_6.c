@@ -58,9 +58,9 @@ GtkWidget* Page_6() {
 void findRecord(GtkButton *button, gpointer user_data){
 
     //Mengambil data dari entri
-    GtkWidget *entry = gtk_widget_paintable_new(user_data);
+    GtkWidget *entry = GTK_WIDGET(user_data);
     gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE(entry)));
-    GtkEntryBuffer *bufferId = gtk_entry_get_buffer(GTK_ENTRY_BUFFER_CLASS(entry));
+    GtkEntryBuffer *bufferId = gtk_entry_get_buffer(GTK_ENTRY(entry));
 
     //Mencari riwayat medis berdasarkan ID
     char temp_id[5];
@@ -74,6 +74,7 @@ void findRecord(GtkButton *button, gpointer user_data){
     } else {
         gtk_label_set_text(GTK_LABEL(report_label6_1), "");
         // Menampilkan subhalaman 2 jika data ditemukan
+        gtk_stack_set_visible_child(GTK_STACK(stack6), page6_2);
     }
     // Mengosongkan entri
     gtk_entry_buffer_set_text(bufferId, "", -1);
@@ -94,10 +95,12 @@ GtkWidget* Page6_1(){
     gtk_widget_set_size_request(box_id, 500, 50);
     GtkWidget *entry_Id = gtk_entry_new();
     setinput(entry_Id, "Masukkan ID riwayat medis yang ingin diubah:", box_id, "icons/id.png");
+    gtk_fixed_put(GTK_FIXED(fixed1), box_id, 330, 160);
 
     //Membuat tombol kembali ke menu utama
     GtkWidget* BackButton = iconButton("icons/back.png", "Kembali ke menu utama", "back-button", "back-title");
     gtk_widget_set_size_request(BackButton, 240, 60);
+    gtk_fixed_put(GTK_FIXED(fixed1), BackButton, 60, 50);
 
     //Kembali ke menu utama ketika tombol diklik
     g_signal_connect(BackButton, "clicked", G_CALLBACK(on_go_to_main), NULL);
@@ -105,6 +108,7 @@ GtkWidget* Page6_1(){
     //Membuat tombol cari data pasien
     GtkWidget* show_button = iconButton("icons/find.png", "Cari Data", "find-button", "find-title");
     gtk_widget_set_size_request(show_button,150,50);
+    gtk_fixed_put(GTK_FIXED(fixed1), show_button, 860, 177);  
 
     //Memanggil fungsi findRecord ketika tombol cari data pasien ditekan
     g_signal_connect(show_button, "clicked", G_CALLBACK(findRecord), entry_Id);   

@@ -44,6 +44,7 @@ GtkWidget* Page_3() {
     // Membuat stack untuk menyimpan sub halaman 3
     stack3 = gtk_stack_new();
     gtk_stack_set_transition_type(GTK_STACK(stack3), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
+    gtk_box_append(GTK_BOX(page), stack3);
 
     // Membuat sub halaman 1 dari halaman 3
     page3_1 = Page3_1();
@@ -61,7 +62,7 @@ void findPatient(GtkButton *button, gpointer user_data){
     
     // Mengambil data dari entri ID pasien
     GtkWidget *entry = GTK_WIDGET(user_data);
-    gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE_GET_IFACE(entry)));
+    gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE(entry)));
     GtkEntryBuffer *bufferId = gtk_entry_get_buffer(GTK_ENTRY(entry));
 
     // Mencari data pasien berdasarkan ID pasien
@@ -95,7 +96,7 @@ GtkWidget* Page3_1(){
     GtkWidget *box_id = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_size_request(box_id, 500, 50);
     GtkWidget *entry_Id = gtk_entry_new();
-    setinput(entry_Id, "Masukkan ID Pasien", box_id, "icons/id.png");
+    setinput(entry_Id, "Masukkan ID Pasien Yang Akan Diubah", box_id, "icons/id.png");
     gtk_fixed_put(GTK_FIXED(fixed1), box_id, 330, 160);
 
     //Membuat tombol kembali ke menu utama
@@ -161,12 +162,14 @@ GtkWidget* Page3_2(){
     GtkWidget* save_button = gtk_button_new_with_label("Simpan Data");
     gtk_widget_set_size_request(save_button,150,50);
     gtk_widget_add_css_class(save_button, "save-button");
+    gtk_fixed_put(GTK_FIXED(fixed), save_button, 850, 650);
 
     //Memanggil fungsi updatePatient ketika tombol simpan ditekan
     g_signal_connect(save_button, "clicked", G_CALLBACK(updatePatient), name_entry3);
     g_signal_connect(save_button, "clicked", G_CALLBACK(updatePatient), adress_entry3);
     g_signal_connect(save_button, "clicked", G_CALLBACK(updatePatient), city_entry3);
     g_signal_connect(save_button, "clicked", G_CALLBACK(updatePatient), birth_place_entry3);
+    g_signal_connect(save_button, "clicked", G_CALLBACK(updatePatient), birth_date_entry3);
     g_signal_connect(save_button, "clicked", G_CALLBACK(updatePatient), age_entry3); 
     g_signal_connect(save_button, "clicked", G_CALLBACK(updatePatient), bpjs_entry3);
     g_signal_connect(save_button, "clicked", G_CALLBACK(updatePatient), patient_id_entry3);
@@ -186,7 +189,7 @@ void updatePatient(GtkButton *button, gpointer user_data) {
 
     //Mengambil data dari entri
     GtkWidget *entry = GTK_WIDGET(user_data);
-    gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE_LABEL(entry)));
+    gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE(entry)));
     GtkEntryBuffer *buffename = gtk_entry_get_buffer(GTK_ENTRY(name_entry3));
     GtkEntryBuffer *bufferadress = gtk_entry_get_buffer(GTK_ENTRY(adress_entry3));
     GtkEntryBuffer *buffercity = gtk_entry_get_buffer(GTK_ENTRY(city_entry3));
@@ -226,48 +229,43 @@ void updatePatient(GtkButton *button, gpointer user_data) {
              && strcmp(age_Temp3, "") != 0 && strcmp(bpjs_Temp3, "") != 0 && strcmp(patient_id_Temp3, "") != 0
              && atoi(age_Temp3) > 0){
 
-        if (isDuplicatePatient(name_Temp3, bpjs_Temp3)) {
-            gtk_label_set_text(GTK_LABEL(report_label3_2), "*Pasien dengan nama atau nomor BPJS tersebut sudah ada.");
-        } 
-        else {
-            strcpy(patients[indexPatient3].name, name_Temp3);
-            strcpy(patients[indexPatient3].address, adress_Temp3);
-            strcpy(patients[indexPatient3].city, city_Temp3);
-            strcpy(patients[indexPatient3].birth_place, birth_place_Temp3);
-            strcpy(patients[indexPatient3].birth_date, birth_date_Temp3);
+        strcpy(patients[indexPatient3].name, name_Temp3);
+        strcpy(patients[indexPatient3].address, adress_Temp3);
+        strcpy(patients[indexPatient3].city, city_Temp3);
+        strcpy(patients[indexPatient3].birth_place, birth_place_Temp3);
+        strcpy(patients[indexPatient3].birth_date, birth_date_Temp3);
 
-            int day, year, month_number;
-            char originalDate[MAX_STRING_LENGTH];
-            char month[MAX_STRING_LENGTH];
-            sscanf(patients[indexPatient3].birth_date, "%d %s %d", &day, month, &year);
+        int day, year, month_number;
+        char originalDate[MAX_STRING_LENGTH];
+        char month[MAX_STRING_LENGTH];
+        sscanf(patients[indexPatient3].birth_date, "%d %s %d", &day, month, &year);
 
-            for(month_number = 0; month_number < 12 ; month_number++){
-                if (strcmp(month, months[month_number]) == 0){
-                    month_number++;
-                    break;
-                }
+        for(month_number = 0; month_number < 12 ; month_number++){
+            if (strcmp(month, months[month_number]) == 0){
+                month_number++;
+                break;
             }
-            snprintf(patients[indexPatient3].birth_date, sizeof(patients[indexPatient3].birth_date), "%d-%d-%d", year, month_number, day);
-            patients[indexPatient3].age = atoi(age_Temp3);
-            strcpy(patients[indexPatient3].bpjs, bpjs_Temp3);
-            strcpy(patients[indexPatient3].patient_id, patient_id_Temp3);
-
-            gtk_label_set_text(GTK_LABEL(report_label3_2), "");
-            gtk_entry_buffer_set_text(buffename, "", -1);
-            gtk_entry_buffer_set_text(bufferadress, "", -1);
-            gtk_entry_buffer_set_text(buffercity, "", -1);
-            gtk_entry_buffer_set_text(bufferbirth_place, "", -1);
-            gtk_entry_buffer_set_text(bufferbirth_date, "", -1);
-            gtk_entry_buffer_set_text(bufferage, "", -1);
-            gtk_entry_buffer_set_text(bufferbpjs, "", -1);
-            gtk_entry_buffer_set_text(bufferpatient_id, "", -1);
-
-            //Kembali ke sub halaman utama    
-            gtk_stack_set_visible_child(GTK_STACK(stack3), page3_1);
-            gtk_stack_set_visible_child(GTK_STACK(stack), MainPage);
-
-            WriteFileData();
         }
+        snprintf(patients[indexPatient3].birth_date, sizeof(patients[indexPatient3].birth_date), "%d-%d-%d", year, month_number, day);
+        patients[indexPatient3].age = atoi(age_Temp3);
+        strcpy(patients[indexPatient3].bpjs, bpjs_Temp3);
+        strcpy(patients[indexPatient3].patient_id, patient_id_Temp3);
+
+        gtk_label_set_text(GTK_LABEL(report_label3_2), "");
+        gtk_entry_buffer_set_text(buffename, "", -1);
+        gtk_entry_buffer_set_text(bufferadress, "", -1);
+        gtk_entry_buffer_set_text(buffercity, "", -1);
+        gtk_entry_buffer_set_text(bufferbirth_place, "", -1);
+        gtk_entry_buffer_set_text(bufferbirth_date, "", -1);
+        gtk_entry_buffer_set_text(bufferage, "", -1);
+        gtk_entry_buffer_set_text(bufferbpjs, "", -1);
+        gtk_entry_buffer_set_text(bufferpatient_id, "", -1);
+
+        //Kembali ke sub halaman utama    
+        gtk_stack_set_visible_child(GTK_STACK(stack3), page3_1);
+        gtk_stack_set_visible_child(GTK_STACK(stack), MainPage);
+
+        WriteFileData();
     }
     else {
         gtk_label_set_text(GTK_LABEL(report_label3_2), "*Data belum lengkap atau terdapat kesalahan input");

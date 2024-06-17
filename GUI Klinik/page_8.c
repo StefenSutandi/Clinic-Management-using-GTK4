@@ -32,10 +32,12 @@ GtkWidget* Page_8() {
     GtkWidget* BackButton = iconButton("icons/back.png", "Kembali ke menu utama", "back-button", "back-title");
     gtk_widget_set_size_request(BackButton, 240, 60);
     g_signal_connect(BackButton, "clicked", G_CALLBACK(on_go_to_main), NULL);
+    gtk_fixed_put(GTK_FIXED(fixed), BackButton, 60, 50);
 
     // Membuat box entries untuk input ID
     GtkWidget *id_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_size_request(id_box, 500, 50);
+    GtkWidget *inputID = gtk_entry_new();
     setinput(inputID, "Masukkan ID", id_box,"icons/id.png");
     gtk_fixed_put(GTK_FIXED(fixed), id_box, 550, 60);
 
@@ -44,6 +46,7 @@ GtkWidget* Page_8() {
     GtkWidget* show_button = iconButton("icons/find.png", "Cari Data", "find-button", "find-title");
     gtk_widget_set_size_request(show_button,150,50);
     gtk_box_append(GTK_BOX(boxbutton2), show_button);
+    gtk_fixed_put(GTK_FIXED(fixed), boxbutton2, 1060, 75);
 
     //Memanggil fungsi displayPatientWithMedicalRecords ketika tombol ditekan
     g_signal_connect(show_button, "clicked", G_CALLBACK(displayPatientWithMedicalRecords), inputID);
@@ -52,6 +55,8 @@ GtkWidget* Page_8() {
     GtkWidget *boxgrid = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     GtkWidget *grid = gtk_grid_new();
     gtk_grid_set_row_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_box_append(GTK_BOX(boxgrid), grid);
     gtk_fixed_put(GTK_FIXED(fixed), boxgrid, 300, 240);
 
     //Menambahkan data pasien ke dalam grid
@@ -110,6 +115,7 @@ GtkWidget* Page_8() {
     //Membuat supaya grid dapat digeser
     GtkWidget *scrolled_window = gtk_scrolled_window_new();
     gtk_widget_set_size_request(scrolled_window,550,400);
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled_window), ScrollGrid);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_fixed_put(GTK_FIXED(fixed), scrolled_window, 650, 300);
 

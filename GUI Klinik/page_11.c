@@ -43,6 +43,7 @@ GtkWidget* Page_11() {
     // Membuat tombol untuk menampilkan pendapatan
     GtkWidget* show_button = iconButton("icons/finds.png", "Cari Laporan", "report-button", "report-title");
     gtk_widget_set_size_request(show_button,150,50);
+    gtk_fixed_put(GTK_FIXED(fixed), show_button, 820, 96);
 
     // Memanggil fungsi getRevenue ketika tombol ditekan
     g_signal_connect(show_button, "clicked", G_CALLBACK(getRevenue), month_spin);
@@ -54,6 +55,7 @@ GtkWidget* Page_11() {
 
     AnnualShow = gtk_label_new("");
     gtk_widget_add_css_class(AnnualShow, "yearly");
+    gtk_fixed_put(GTK_FIXED(fixed), AnnualShow, 800, 330);
 
     AverageShow = gtk_label_new("");
     gtk_widget_add_css_class(AverageShow, "average");
@@ -68,8 +70,8 @@ GtkWidget* Page_11() {
 void getRevenue(GtkButton *button, gpointer user_data) {
 
     // Mendapatkan data dari input bulan dan tahun
-    GtkWidget *month_spin = GTK_WIDGET_PAINTABLE(user_data);
-    GtkWidget *year_spin = g_object_get_data(G_OBJECT_TYPE_NAME(month_spin), "year_spin");
+    GtkWidget *month_spin = GTK_WIDGET(user_data);
+    GtkWidget *year_spin = g_object_get_data(G_OBJECT(month_spin), "year_spin");
 
     int month = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(month_spin));
     int year = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(year_spin));

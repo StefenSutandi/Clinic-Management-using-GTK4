@@ -89,6 +89,9 @@ static void activate(GtkApplication *app, gpointer user_data) {
 
     // Halaman 13 berisi identitas kelompok
     Page[13] = Page_13();
+
+    // Menampilkan halaman awal
+    gtk_widget_set_visible(GTK_WIDGET(window), TRUE);
 }
 
 int main(int argc, char *argv[]) {
@@ -100,7 +103,7 @@ int main(int argc, char *argv[]) {
     GtkApplication *app;
     int status;
     
-    app = gtk_application_new("com.example.KlinikX", G_APPLICATION_DEFAULT_FLAGS);
+    app = gtk_application_new("com.KlinikX", G_APPLICATION_DEFAULT_FLAGS);
     
     //Menjalankan aplikasi
     g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);

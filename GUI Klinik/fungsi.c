@@ -416,7 +416,7 @@ const char* getMonthName(int month) {
 
 // Fungsi untuk menulis data pasien ke file CSV
 void WriteFileData(){
-    FILE *file = fopen("data_pasien1.csv", "w");
+    FILE *file = fopen("CSV/data_pasien.csv", "w");
     if (file == NULL) {
         printf("Gagal membuka file data_pasien.csv\n");
         return;
@@ -451,7 +451,7 @@ void WriteFileData(){
 
 // Fungsi untuk menulis data rekam medis ke file CSV
 void WriteFileRecord(){
-    FILE *file = fopen("riwayat_datang2.csv", "w");
+    FILE *file = fopen("CSV/riwayat_datang.csv", "w");
     if (file == NULL) {
         printf("Gagal membuka file riwayat_datang.csv\n");
         return;

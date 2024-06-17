@@ -19,6 +19,7 @@ GtkWidget *LabelWarning;
 char name_Temp[50];
 char adress_Temp[50];
 char city_Temp[50];
+char birth_place_Temp[50];
 char birth_date_Temp[50];
 char age_Temp[50];
 char bpjs_Temp[50];
@@ -35,7 +36,9 @@ GtkWidget* Page_1(){
 
     // Membuat tombol kembali ke halaman utama
     GtkWidget* BackButton = iconButton("icons/back.png", "Kembali ke menu utama","back-button","back-title");
+    gtk_widget_set_size_request(BackButton, 240, 60);
     g_signal_connect(BackButton, "clicked", G_CALLBACK(on_go_to_main), NULL);
+    gtk_fixed_put(GTK_FIXED(fixed), BackButton, 60, 50);
 
     // Membuat box untuk menyimpan seluruh entri
     GtkWidget *boxInput = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -58,6 +61,7 @@ GtkWidget* Page_1(){
     setinput(bpjs_entry, "Masukkan nomor BPJS (format: 1234567xxx): ", boxInput,"icons/bpjs.png");
     patient_id_entry1 = gtk_entry_new();
     setinput(patient_id_entry1, "Masukkan ID pasien (format: 1230xxx): ", boxInput,"icons/id.png");
+    gtk_fixed_put(GTK_FIXED(fixed), boxInput, 710, 90);
 
     // Membuat tombol simpan data
     GtkWidget *boxbutton = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
@@ -65,6 +69,7 @@ GtkWidget* Page_1(){
     gtk_widget_set_size_request(save_button,150,50);
     gtk_widget_add_css_class(save_button, "save-button");
     gtk_box_append(GTK_BOX(boxbutton), save_button);
+    gtk_fixed_put(GTK_FIXED(fixed), boxbutton, 850, 650);
 
     //Mengatur fungsi tombol ketika tombol simpan ditekan
     g_signal_connect(save_button, "clicked", G_CALLBACK(addPatient), name_entry);
@@ -80,9 +85,11 @@ GtkWidget* Page_1(){
     GtkWidget *boxWarning = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     LabelWarning = gtk_label_new("");
     gtk_box_append(GTK_BOX(boxWarning), LabelWarning);
+    gtk_fixed_put(GTK_FIXED(fixed), boxWarning, 730, 620);
 
     // Menambahkan halaman ini ke dalam stack di main window
     gtk_stack_add_named(GTK_STACK(stack), page, "Page_1");
+    return page;
 }
     
 //Fungsi untuk menambahkan pasien

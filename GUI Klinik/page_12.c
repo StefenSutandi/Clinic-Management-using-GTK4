@@ -21,6 +21,7 @@ GtkWidget* Page_12() {
     GtkWidget* BackButton = iconButton("icons/back.png", "Kembali ke menu utama", "back-button", "back-title");
     gtk_widget_set_size_request(BackButton, 240, 60);
     g_signal_connect(BackButton, "clicked", G_CALLBACK(on_go_to_main), NULL);
+    gtk_fixed_put(GTK_FIXED(fixed), BackButton, 60, 50);
 
     // Membuat grid untuk menampilkan data pasien
     ScrollGrid12 = gtk_grid_new();
@@ -32,6 +33,7 @@ GtkWidget* Page_12() {
     gtk_widget_set_size_request(scrolled_window,650,400);
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled_window), ScrollGrid12);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_fixed_put(GTK_FIXED(fixed), scrolled_window, 360, 350);
     gtk_scrolled_window_set_overlay_scrolling(GTK_SCROLLED_WINDOW(scrolled_window), FALSE);
 
     //Memanggil fungsi displayPatientsForControl

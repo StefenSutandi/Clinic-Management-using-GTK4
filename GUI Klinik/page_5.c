@@ -35,6 +35,7 @@ GtkWidget* Page_5(){
     GtkWidget* BackButton = iconButton("icons/back.png", "Kembali ke menu utama","back-button","back-title");
     gtk_widget_set_size_request(BackButton, 240, 60);
     g_signal_connect(BackButton, "clicked", G_CALLBACK(on_go_to_main), NULL);
+    gtk_fixed_put(GTK_FIXED(fixed), BackButton, 60, 50);
 
     // Membuat box untuk menyimpan seluruh entri
     GtkWidget *boxInput = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -43,6 +44,7 @@ GtkWidget* Page_5(){
     date_entry = gtk_entry_new();
     setinput(date_entry, "Masukkan tanggal (contoh: 1 Januari 2022): ", boxInput, "icons/date.png");
     patient_id_entry = gtk_entry_new();
+    setinput(patient_id_entry, "Masukkan ID pasien: ", boxInput, "icons/id.png");
     diagnosis_entry = gtk_entry_new();
     setinput(diagnosis_entry, "Masukkan diagnosis: ", boxInput, "icons/sick.png");
     treatment_entry = gtk_entry_new();
@@ -71,6 +73,7 @@ GtkWidget* Page_5(){
     GtkWidget *boxWarning = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     report_label5 = gtk_label_new("");
     gtk_box_append(GTK_BOX(boxWarning), report_label5);
+    gtk_fixed_put(GTK_FIXED(fixed), boxWarning, 730, 490);
 
     //Menambahkan halaman 5 ke stack pada main window 
     gtk_stack_add_named(GTK_STACK(stack), page, "Page_5");
@@ -81,8 +84,8 @@ GtkWidget* Page_5(){
 void addMedicalRecord(GtkButton *button, gpointer user_data) {
 
     //Mengambil data dari entry
-    GtkWidget *entry = gtk_widget_get_root(user_data);
-    gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE_LABEL(entry)));
+    GtkWidget *entry = GTK_WIDGET(user_data);
+    gchar *data = g_strdup(gtk_editable_get_text(GTK_EDITABLE(entry)));
     GtkEntryBuffer *bufferpatient_id = gtk_entry_get_buffer(GTK_ENTRY(patient_id_entry));
     GtkEntryBuffer *bufferdate = gtk_entry_get_buffer(GTK_ENTRY(date_entry));
     GtkEntryBuffer *bufferdiagnosis = gtk_entry_get_buffer(GTK_ENTRY(diagnosis_entry));

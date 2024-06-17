@@ -9,12 +9,13 @@ GtkWidget *name_show;
 GtkWidget *adress_show;
 GtkWidget *city_show;
 GtkWidget *birth_place_show;
+GtkWidget *birth_date_show;
 GtkWidget *age_show;
 GtkWidget *bpjs_show;
 GtkWidget *patient_id_show;
 GtkWidget *LabelWarning2;
 
-GtkWidget* page_2() {
+GtkWidget* Page_2() {
 
     // Membuat box sebagai halaman kedua
     GtkWidget* page = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
@@ -27,6 +28,7 @@ GtkWidget* page_2() {
     GtkWidget* BackButton = iconButton("icons/back.png", "Kembali ke menu utama", "back-button", "back-title");
     gtk_widget_set_size_request(BackButton, 240, 60);
     g_signal_connect(BackButton, "clicked", G_CALLBACK(on_go_to_main), NULL);
+    gtk_fixed_put(GTK_FIXED(fixed), BackButton, 60, 50);
     
     // Membuat box entri untuk memasukkan ID pasien
     GtkWidget *id_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -40,6 +42,7 @@ GtkWidget* page_2() {
     GtkWidget* show_button = iconButton("icons/find.png", "Cari Data", "find-button", "find-title");
     gtk_widget_set_size_request(show_button,150,50);
     gtk_box_append(GTK_BOX(boxbutton2), show_button);
+    gtk_fixed_put(GTK_FIXED(fixed), boxbutton2, 860, 175);
 
     // Memanggil fungsi displayPatient ketika tombol cari data pasien ditekan
     g_signal_connect(show_button, "clicked", G_CALLBACK(displayPatient), inputID);
@@ -48,6 +51,7 @@ GtkWidget* page_2() {
     GtkWidget *boxgrid = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     GtkWidget *grid = gtk_grid_new();
     gtk_box_append(GTK_BOX(boxgrid), grid);
+    gtk_fixed_put(GTK_FIXED(fixed), boxgrid, 340, 360);
 
     // Menambahkan label ke dalam grid untuk menampilkan data pasien
     EditGrid(grid, &name_show, 0, 0);
@@ -63,12 +67,14 @@ GtkWidget* page_2() {
     EditGrid(grid2, &age_show, 0, 0);
     EditGrid(grid2, &birth_date_show, 0, 1);
     EditGrid(grid2, &bpjs_show, 0, 2);
+    EditGrid(grid2, &patient_id_show, 0, 3);
 
     //Tambahkan box untuk Warning
     GtkWidget* boxWarning2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     LabelWarning2 = gtk_label_new("");
     gtk_widget_add_css_class(LabelWarning2, "white-report");
     gtk_box_append(GTK_BOX(boxWarning2), LabelWarning2);
+    gtk_fixed_put(GTK_FIXED(fixed), boxWarning2, 350, 230);
 
     // Menambahkan halaman 2 ke dalam stack di main window
     gtk_stack_add_named(GTK_STACK(stack), page, "Page_2");
@@ -83,6 +89,7 @@ void displayPatient(GtkButton *button, gpointer user_data) {
     GtkEntryBuffer *bufferId = gtk_entry_get_buffer(GTK_ENTRY(entry));
 
     char patient_id[15];
+    g_strlcpy(patient_id, data, sizeof(patient_id));
     // Mencari data pasien berdasarkan ID pasien
     int index = findPatientById(patient_id);
 
