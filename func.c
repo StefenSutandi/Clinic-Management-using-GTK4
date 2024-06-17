@@ -10,7 +10,6 @@ int patient_count = 0;
 int record_count = 0;
 const char * months[12] = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
 
-
 // Implementasi fungsi untuk mengecek duplikasi data pasien berdasarkan nama atau nomor BPJS
 bool isDuplicatePatient(const char *name, const char *bpjs) {
     for (int i = 0; i < patient_count; i++) {
@@ -200,6 +199,7 @@ void updatePatient() {
     fclose(file);
 }
 
+// Menghapus pasien
 void deletePatient() {
     char patient_id[15];
     printf("Masukkan ID pasien yang ingin dihapus: ");
