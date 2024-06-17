@@ -1,4 +1,3 @@
-// Analisis Kinerja
 % cumulative, self, self, total
 time, seconds, seconds, calls, Ts/call, Ts/call, name
 10.00, 0.10, 0.10, 5, 0.02, 0.10, addPatient
