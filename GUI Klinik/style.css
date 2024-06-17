@@ -1,0 +1,329 @@
+/* style.css */
+.tab-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    min-width: 240px;  /* Atur lebar minimum */
+    min-height: 10px; /* Atur tinggi minimum */
+    margin: 2px;      /* Tambahkan margin */
+    border: 1px solid black; /* Tambahkan garis pinggir */
+    }
+    
+    
+.tab-button:hover {
+    background-color: #0056b3;
+}
+
+.save-button{
+    background-image: none;
+    background-color: #031057ff;
+    border-radius: 20px;
+    color: white;
+    font-style: normal;
+    font-weight: bold;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+}
+
+.save-button:hover{
+    background-color: rgb(17, 17, 93);
+}
+.start-button{
+    background-image: none;
+    background-color: #ffffff;
+    border-radius: 30px;
+    color: #000080ff;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    font-size: 35px; 
+}
+.start-button:hover{
+    background-color: #d3d3d3;
+}
+       
+.find-button{
+    background-image: none;
+    background-color: #ffffff;
+    border-radius: 20px;
+}
+
+.find-button:hover{
+    background-color: #d3d3d3;
+}
+
+.find-title {
+    font-weight: bold;
+    color: #031057ff;
+    font-family: 'Arial Rounded MT Bold', 'Arial', serif;
+}
+
+.menu-button{
+    background-image: none;
+    background-color: #031057ff;
+}
+
+.check-box{
+    background-color: #007bff;
+}
+
+.header {
+    font-weight: bold;
+    padding: 10px;
+    background-color: #d3d3d3;
+    border: 1px solid #000;
+    margin-bottom: 10px;
+    margin-right: 1px;
+    margin-left: 15px;
+}
+
+.label {
+    margin-bottom: 30px;
+    font-weight: bold;
+    padding: 10px;
+    color: #000080ff;
+}
+
+.label2 {
+    margin-bottom: 16px;
+    font-weight: bold;
+    padding: 10px;
+    color: #000080ff;
+}
+
+
+.label3 {
+    margin-bottom: 16px;
+    margin-right: 5px;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 10px;
+    color: #000080ff;
+}
+
+.label4 {
+    margin-bottom: 3px;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 10px;
+    color: #000080ff;
+}
+
+.label5 {
+    margin-bottom: 3px;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
+    color: #000080ff;
+}
+
+.background-window {
+    background-image: url('background/StartingPage1.png');
+    background-size: cover;
+}
+
+.background-main {
+    background-image: url("background/MainPage.png");
+    /* background-color: #ffffff; */
+    background-size: cover;
+}
+
+.background-page1 {
+    background-image: url("background/page1.png");
+    background-size: cover;
+}
+
+.background-page2 {
+    background-image: url("background/page2.png");
+    background-size: cover;
+}
+
+.background-page3_1 {
+    background-image: url("background/page3_1.png");
+    background-size: cover;
+}
+
+.background-page3_2 {
+    background-image: url("background/page3_2.png");
+    background-size: cover;
+}
+
+.background-page5 {
+    background-image: url("background/page5.png");
+    background-size: cover;
+}
+
+.background-page8 {
+    background-image: url("background/page8.png");
+    background-size: cover;
+}
+
+.background-page9 {
+    background-image: url("background/page9.png");
+    background-size: cover;
+}
+
+.background-page11 {
+    background-image: url("background/page11.png");
+    background-size: cover;
+}
+
+.background-page12 {
+    background-image: url("background/page12.png");
+    background-size: cover;
+}
+
+.background-page13 {
+    background-image: url("background/page13.png");
+    background-size: cover;
+}
+
+.colored-box {
+    background-color: #ffffff;  /* Warna latar belakang biru */
+}
+
+.menu {
+    background-image: none;
+    background-color: #031057ff;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    margin-left: 40px;
+    box-shadow: 10px 4px 10px rgba(0, 0, 0, 0.75);
+}
+
+.back-button {
+    background-image: none;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 10px 4px 10px rgba(0, 0, 0, 0.75);
+}
+
+.back-button:hover {
+    background-color: #d3d3d3;
+}
+
+.back-title {
+    font-weight: bold;
+    color: #031057ff;
+    font-family: 'Arial Rounded MT Bold', 'Arial', serif;
+}
+
+.report-button {
+    background-image: none;
+    background-color:#031057ff;
+    border-radius: 10px;
+    box-shadow: 10px 4px 10px rgba(0, 0, 0, 0.75);
+}
+
+.report-button:hover {
+    background-color: rgb(14, 41, 192);
+}
+
+.report-title {
+    font-weight: bold;
+    color: white;
+    font-family: 'Arial Rounded MT Bold', 'Arial', serif;
+}
+
+.menu:hover {
+    background-image: none;
+    background-color: #031092ff;
+}
+
+.menu-title{
+    font-weight: bold;
+    color: #ffffff;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+}
+
+.Title {
+    font-weight: bold;
+    color: #000000;
+    font-size: 9px;
+}
+
+.white-report{
+    color: #ffffff;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.headermed {
+    font-weight: bold;
+    padding: 10px;
+    background-color: #d3d3d3;
+    border: 1px solid #000;
+    margin-bottom: 10px;
+    margin-right: 1px;
+    margin-left: 15px;
+}
+
+.labelmed {
+    font-weight: bold;
+    padding: 10px;
+    background-color: aqua;
+    border: 1px solid #000;
+    margin-bottom: 10px;
+    margin-right: 1px;
+    margin-left: 15px;
+}
+
+.graphblue {
+    color: #031057ff;
+}
+
+.graphgreen {
+    color:#009d64ff;
+}
+
+.entri {
+    border-radius: 10px; /* Mengatur lengkungan border */
+    border: 2px solid #007ACC; /* Mengatur warna border */
+    padding: 10px; /* Menambahkan padding untuk isi entri */
+}
+
+.box-nama {
+    margin-right: 20px; /* Margin kanan sebesar 10px */
+    margin-left: 20px; /* Margin kiri sebesar 20px */
+    margin-top: 20px; /* Margin atas sebesar 30px */
+    border-radius: 10px; /* Mengatur lengkungan border */
+    border: 2px solid #007ACC; /* Mengatur warna border */
+}
+
+.spin-button {
+    background-color: #031057ff;
+    color: white;
+    font-size: 20px;
+    border: 2px solid #031057ff;
+}
+
+.spin-button button {
+    background-color: white;
+    color: #031057ff;
+}
+
+.spin-button:hover {
+    background-color: #0381ff;
+}
+
+.monthly{
+    color:  #031057ff;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.yearly{
+    color:  #009d64ff;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.average{
+    color:  #ff6600ff;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+}
