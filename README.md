@@ -25,9 +25,8 @@ A clinic in city X is implementing a patient record system for patients who come
 ## Technologies Used
 
 - **GTK4**: For building the graphical user interface.
-- **Database**: To store patient records and related information (e.g., SQLite).
-- **Programming Language**: (Specify the language used, e.g., C, Python, etc.)
-
+- **Programming Language**: C for build the backend system.
+  
 ## Goals
 
 The goal of this project is to streamline the patient record management process at clinic X, improving efficiency and accuracy in handling patient data and medical history.
